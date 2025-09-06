@@ -21,10 +21,10 @@ jobs:
           username: ${{ secrets.RYU_CHO_USER_NAME }}
           email: ${{ secrets.RYU_CHO_USER_EMAIL }}
 
-          upstream-repo: https://github.com/Spanu18/docs-it.git
+          upstream-repo: https://github.com/Spanu18/docs-it
           upstream-repo-branch: main
 
-          head-repo: https://github.com/vuejs/docs.git
+          head-repo: https://github.com/vuejs/docs
           head-repo-branch: main
 
           track-from: 69a165e3182e332d3970e29de96324061c9af043
