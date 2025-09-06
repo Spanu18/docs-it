@@ -2,7 +2,13 @@ name: ryu-cho
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '0 8,16 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
   ryu-cho:
@@ -11,14 +17,18 @@ jobs:
     steps:
       - uses: vuejs-translations/ryu-cho@v1
         with:
-          # ↓ personal access token (classic) with `public_repo` scope
           access-token: ${{ secrets.RYU_CHO_ACCESS_TOKEN }}
           username: ${{ secrets.RYU_CHO_USER_NAME }}
           email: ${{ secrets.RYU_CHO_USER_EMAIL }}
-          upstream-repo: https://github.com/vuejs-translations/docs-it.git
+
+          upstream-repo: https://github.com/Spanu18/docs-it.git
           upstream-repo-branch: main
-          head-repo: https://github.com/vuejs/docs
+
+          head-repo: https://github.com/vuejs/docs.git
           head-repo-branch: main
+
           track-from: 7119fae1205bc9adf5b229be3c8d56acac027a77
-          # path-starts-with: src/
+
+          path-starts-with: src/
+
           workflow-name: ryu-cho
