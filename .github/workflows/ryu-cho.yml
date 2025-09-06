@@ -29,6 +29,4 @@ jobs:
 
           track-from: 4f510848efd044a603472e20b06b5d6491b79ff8
 
-          path-starts-with: src/
-
           workflow-name: ryu-cho
