@@ -27,7 +27,7 @@ jobs:
           head-repo: https://github.com/vuejs/docs.git
           head-repo-branch: main
 
-          track-from: 7119fae1205bc9adf5b229be3c8d56acac027a77
+          track-from: 69a165e3182e332d3970e29de96324061c9af043
 
           path-starts-with: src/
 
