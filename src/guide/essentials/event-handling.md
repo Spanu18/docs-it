@@ -116,7 +116,7 @@ methods: {
 
 </div>
 
-Un handler del metodo riceve automaticamente l'oggetto Evento nativo del DOM che lo innesca. Nell'esempio sopra, possiamo accedere all'elemento che dispaccia l'evento tramite `event.target.tagName`.
+Un handler del metodo riceve automaticamente l'oggetto Evento nativo del DOM che lo innesca. Nell'esempio sopra, possiamo accedere all'elemento che dispaccia l'evento tramite `event.target`.
 
 <div class="composition-api">
 
@@ -258,7 +258,8 @@ I modificatori `.capture`, `.once` e `.passive` riflettono le [opzioni del metod
 
 ```vue-html
 <!-- usa la modalità di cattura quando aggiungi il listener dell'evento -->
-<!-- cioè un evento che punta a un elemento interno viene gestito qui prima di essere gestito da quell'elemento -->
+<!-- cioè un evento che punta a un elemento interno viene gestito -->
+<!-- qui prima di essere gestito da quell'elemento -->
 <div @click.capture="doThis">...</div>
 
 <!-- l'evento click sarà attivato al massimo una volta -->
@@ -270,7 +271,7 @@ I modificatori `.capture`, `.once` e `.passive` riflettono le [opzioni del metod
 <div @scroll.passive="onScroll">...</div>
 ```
 
-Il modificatore `.passive` è tipicamente usato con i listener degli eventi touch per [migliorare le prestazioni sui dispositivi mobili](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners).
+Il modificatore `.passive` è tipicamente usato con i listener degli eventi touch per [migliorare le prestazioni sui dispositivi mobili](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scroll_performance_using_passive_listeners).
 
 ::: tip
 Non usare `.passive` e `.prevent` insieme, perché `.passive` indica già al browser che _non intendi_ impedire il comportamento predefinito dell'evento, se lo fai, probabilmente riceverai un avviso dal browser.
@@ -285,7 +286,7 @@ Quando si ascoltano gli eventi della tastiera, spesso è necessario verificare s
 <input @keyup.enter="submit" />
 ```
 
-Come modificatore è possibile utilizzare qualsiasi nome di tasto valido, esposto tramite [`KeyboardEvent.key`](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values), convertendolo in kebab-case.
+Come modificatore è possibile utilizzare qualsiasi nome di tasto valido, esposto tramite [`KeyboardEvent.key`](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values), convertendolo in kebab-case.
 
 ```vue-html
 <input @keyup.page-down="onPageDown" />
@@ -356,3 +357,5 @@ Il modificatore `.exact` consente di controllare la combinazione esatta dei tast
 - `.middle`
 
 Questi modificatori limitano l'handler agli eventi attivati da un specifico tasto del mouse.
+
+Note, however, that `.left`, `.right`, and `.middle` modifier names are based on the typical right-handed mouse layout, but in fact represent "main", "secondary", and "auxiliary" pointing device event triggers, respectively, and not the actual physical buttons. So that for a left-handed mouse layout the "main" button might physically be the right one but would trigger the `.left` modifier handler. Or a trackpad might trigger the `.left` handler with a one-finger tap, the `.right` handler with a two-finger tap, and the `.middle` handler with a three-finger tap. Similarly, other devices and event sources generating "mouse" events might have trigger modes that are not related to "left" and "right" whatsoever.

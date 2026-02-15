@@ -29,8 +29,11 @@ pnpm i
 pnpm run dev
 ```
 
-Questo progetto richiede che Node.js sia alla versione `v14.0.0` o superiore, perché il codice utilizza nuove funzionalità di JavaScript, come l'optional chaining.
+Questo progetto richiede che Node.js sia `v18` o superiore. Si consiglia di abilitare corepack:
 
+```bash
+corepack enable
+```
 
 ## Lavorare sui contenuti
 

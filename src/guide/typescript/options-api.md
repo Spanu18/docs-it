@@ -230,7 +230,7 @@ declare module 'vue' {
 
 Guarda anche:
 
-- [TypeScript unit tests for component type extensions](https://github.com/vuejs/core/blob/main/packages/dts-test/componentTypeExtensions.test-d.tsx)
+- [TypeScript unit tests for component type extensions](https://github.com/vuejs/core/blob/main/packages-private/dts-test/componentTypeExtensions.test-d.tsx)
 
 ### Posizione dell'aumento di tipo {#type-augmentation-placement}
 
@@ -291,4 +291,8 @@ La posizione di questa estensione è soggetta alle [stesse restrizioni](#type-au
 
 Guarda anche:
 
-- [TypeScript unit tests for component type extensions](https://github.com/vuejs/core/blob/main/packages/dts-test/componentTypeExtensions.test-d.tsx)
+- [TypeScript unit tests for component type extensions](https://github.com/vuejs/core/blob/main/packages-private/dts-test/componentTypeExtensions.test-d.tsx)
+
+## Typing Global Custom Directives {#typing-global-custom-directives}
+
+See: [Typing Custom Global Directives](/guide/typescript/composition-api#typing-global-custom-directives) <sup class="vt-badge ts" />

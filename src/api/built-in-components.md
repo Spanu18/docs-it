@@ -126,7 +126,7 @@ Fornisce un'animazione di transizione a un **solo** elemento o componente.
   </Transition>
   ```
 
-- **Vedi anche** [Guida `<Transition>`](/guide/built-ins/transition)
+- **Vedi anche** [Guida - Transition](/guide/built-ins/transition)
 
 ## `<TransitionGroup>` {#transitiongroup}
 
@@ -282,6 +282,12 @@ Renderizza il contenuto dello slot in un' altra parte del DOM.
      * Può essere cambiato dinamicamente.
      */
     disabled?: boolean
+    /**
+     * When `true`, the Teleport will defer until other
+     * parts of the application have been mounted before
+     * resolving its target. (3.5+)
+     */
+    defer?: boolean
   }
   ```
 
@@ -290,16 +296,25 @@ Renderizza il contenuto dello slot in un' altra parte del DOM.
   Specificando un container di destinazione
 
   ```vue-html
-  <teleport to="#some-id" />
-  <teleport to=".some-class" />
-  <teleport to="[data-teleport]" />
+  <Teleport to="#some-id" />
+  <Teleport to=".some-class" />
+  <Teleport to="[data-teleport]" />
   ```
   Disabilitazione condizionale:
 
   ```vue-html
-  <teleport to="#popup" :disabled="displayVideoInline">
+  <Teleport to="#popup" :disabled="displayVideoInline">
     <video src="./my-movie.mp4">
-  </teleport>
+  </Teleport>
+  ```
+
+  Defer target resolution <sup class="vt-badge" data-text="3.5+" />:
+
+  ```vue-html
+  <Teleport defer to="#late-div">...</Teleport>
+
+  <!-- somewhere later in the template -->
+  <div id="late-div"></div>
   ```
 
 - **Vedi anche** [Guida - Teleport](/guide/built-ins/teleport)
@@ -313,6 +328,7 @@ Usato per orchestrare dipendenze asincrone annidate in un albero di componenti.
   ```ts
   interface SuspenseProps {
     timeout?: string | number
+    suspensible?: boolean
   }
   ```
 
@@ -327,5 +343,7 @@ Usato per orchestrare dipendenze asincrone annidate in un albero di componenti.
   `<Suspense>` accetta due slots: lo slot di `#default` e lo slot `#fallback`. Mostrerà il contenuto dello slot di fallback mentre renderizza lo slot default in memoria.
 
   Se incontra dipendenze asincrone ([Componente asincrono](/guide/components/async) e componenti con [`async setup()`](/guide/built-ins/suspense#async-setup)) mentre renderizza lo slot di default, aspetterà fino a quando tutti sono risolti prima di visualizzare lo slot di default.
+
+  Impostando Suspense come `suspensible`, tutta la gestione delle dipendenze asincrone verrà gestita dal parent Suspense. Vedi i [dettagli implementazione](https://github.com/vuejs/core/pull/6736)
 
 - **Vedi anche** [Guida - Suspense](/guide/built-ins/suspense)

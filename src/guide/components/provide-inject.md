@@ -123,6 +123,8 @@ const message = inject('message')
 </script>
 ```
 
+If multiple parents provide data with the same key, inject will resolve to the value from the closest parent in component's parent chain.
+
 Se il valore fornito è un ref, verrà iniettato così com'è e **non** verrà srotolato automaticamente. Questo consente al componente iniettore di mantenere la connessione reattiva con il componente fornitore.
 
 [Esempio completo di provide + inject con reattività](https://play.vuejs.org/#eNqFUUFugzAQ/MrKF1IpxfeIVKp66Kk/8MWFDXYFtmUbpArx967BhURRU9/WOzO7MzuxV+fKcUB2YlWovXYRAsbBvQije2d9hAk8Xo7gvB11gzDDxdseCuIUG+ZN6a7JjZIvVRIlgDCcw+d3pmvTglz1okJ499I0C3qB1dJQT9YRooVaSdNiACWdQ5OICj2WwtTWhAg9hiBbhHNSOxQKu84WT8LkNQ9FBhTHXyg1K75aJHNUROxdJyNSBVBp44YI43NvG+zOgmWWYGt7dcipqPhGZEe2ef07wN3lltD+lWN6tNkV/37+rdKjK2rzhRTt7f3u41xhe37/xJZGAL2PLECXa9NKdD/a6QTTtGnP88LgiXJtYv4BaLHhvg==)
@@ -168,6 +170,9 @@ export default {
   }
 }
 ```
+
+If multiple parents provide data with the same key, inject will resolve to the value from the closest parent in component's parent chain.
+
 
 [Esempio completo di provide + inject](https://play.vuejs.org/#eNqNkcFqwzAQRH9l0EUthOhuRKH00FO/oO7B2JtERZaEvA4F43+vZCdOTAIJCImRdpi32kG8h7A99iQKobs6msBvpTNt8JHxcTC2wS76FnKrJpVLZelKR39TSUO7qreMoXRA7ZPPkeOuwHByj5v8EqI/moZeXudCIBL30Z0V0FLXVXsqIA9krU8R+XbMR9rS0mqhS4KpDbZiSgrQc5JKQqvlRWzEQnyvuc9YuWbd4eXq+TZn0IvzOeKr8FvsNcaK/R6Ocb9Uc4FvefpE+fMwP0wH8DU7wB77nIo6x6a2hvNEME5D0CpbrjnHf+8excI=)
 
@@ -293,7 +298,7 @@ provide('read-only-count', readonly(count))
 
 Per rendere le iniezioni legate in modo reattivo al provider, è necessario fornire una proprietà calcolata utilizzando la funzione [computed()](/api/reactivity-core#computed):
 
-```js{10}
+```js{12}
 import { computed } from 'vue'
 
 export default {
@@ -315,20 +320,15 @@ export default {
 
 Il metodo `computed()` viene tipicamente utilizzato nelle componenti della Composition API, ma può anche essere utilizzato per complementare determinati casi d'uso nell'Options API. Puoi apprendere ulteriori dettagli sulla sua utilizzo leggendo le sezioni [Fondamenti della reattività](/guide/essentials/reactivity-fundamentals) e [Computed Properties](/guide/essentials/computed) con le preferenze dell'API impostate sulla Composition API.
 
-:::warning Configurazione Temporanea Richiesta
-L'utilizzo sopra descritto richiede di impostare `app.config.unwrapInjectedRef = true` per far sì che le iniezioni siano automaticamente srotolate dalle computed refs. Questo comportamento diventerà predefinito in Vue 3.3 e questa configurazione è stata introdotta temporaneamente per evitare rotture. Non sarà più necessaria dopo la versione 3.3.
-:::
-
 </div>
 
 ## Lavorare con symbol keys {#working-with-symbol-keys}
 
-Finora, abbiamo utilizzato chiavi di iniezione di tipo stringa negli esempi. Se stai lavorando in un'applicazione di grandi dimensioni con molti fornitori di dipendenze o stai creando componenti destinate ad essere utilizzate da altri sviluppatori, è meglio utilizzare chiavi di iniezione di tipo Symbol per evitare potenziali collisioni.
+Finora, abbiamo utilizzato chiavi di iniezione di tipo stringa negli esempi. Se stai lavorando in un'applicazione di grandi dimensioni con molti fornitori di dipendenze o stai creando componenti destinate ad essere utilizzate da altri sviluppatori, è meglio utilizzare chiavi di iniezione di tipo [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol) per evitare potenziali collisioni.
 
 Si consiglia di esportare i Symbols in un file dedicato:
 
-```js
-// keys.js
+```js [keys.js]
 export const myInjectionKey = Symbol()
 ```
 

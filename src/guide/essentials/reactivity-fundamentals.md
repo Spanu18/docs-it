@@ -518,7 +518,7 @@ Nell'esempio qui sotto, `count` e `object` sono proprietà di livello superiore,
 
 ```js
 const count = ref(0)
-const object = { id: ref(0) }
+const object = { id: ref(1) }
 ```
 
 Pertanto, questa espressione funziona come previsto:

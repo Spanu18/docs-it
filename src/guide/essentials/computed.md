@@ -130,7 +130,7 @@ const publishedBooksMessage = computed(() => {
 
 [Prova nel Playground](https://play.vuejs.org/#eNp1kE9Lw0AQxb/KI5dtoTainkoaaREUoZ5EEONhm0ybYLO77J9CCfnuzta0vdjbzr6Zeb95XbIwZroPlMySzJW2MR6OfDB5oZrWaOvRwZIsfbOnCUrdmuCpQo+N1S0ET4pCFarUynnI4GttMT9PjLpCAUq2NIN41bXCkyYxiZ9rrX/cDF/xDYiPQLjDDRbVXqqSHZ5DUw2tg3zP8lK6pvxHe2DtvSasDs6TPTAT8F2ofhzh0hTygm5pc+I1Yb1rXE3VMsKsyDm5JcY/9Y5GY8xzHI+wnIpVw4nTI/10R2rra+S4xSPEJzkBvvNNs310ztK/RDlLLjy1Zic9cQVkJn+R7gIwxJGlMXiWnZEq77orhH3Pq2NH9DjvTfpfSBSbmA==)
 
-Qui abbiamo dichiarato una computed property `publishedBooksMessage`. La funzione `computed()` si aspetta di ricevere una funzione getter, e il valore restituito è un **computed ref**. Similmente ai normali ref, puoi accedere al risultato calcolato con `publishedBooksMessage.value`. I computed ref vengono anche estratti automaticamente nei template, quindi puoi utilizzarli senza `.value` nelle espressioni del template.
+Qui abbiamo dichiarato una computed property `publishedBooksMessage`. La funzione `computed()` si aspetta di ricevere una [getter function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get#description), e il valore restituito è un **computed ref**. Similmente ai normali ref, puoi accedere al risultato calcolato con `publishedBooksMessage.value`. I computed ref vengono anche estratti automaticamente nei template, quindi puoi utilizzarli senza `.value` nelle espressioni del template.
 
 Una computed property tiene traccia automaticamente delle sue dipendenze reattive. Vue è consapevole che il calcolo di `publishedBooksMessage` dipende da `author.books`, quindi aggiornerà qualsiasi binding che dipende da `publishedBooksMessage` quando `author.books` cambia.
 
@@ -256,6 +256,235 @@ const fullName = computed({
 ```
 
 Ora, quando esegui `fullName.value = 'John Doe'`, il setter verrà invocato e `firstName` e `lastName` saranno aggiornati di conseguenza.
+
+</div>
+
+## Getting the Previous Value {#previous}
+
+- Only supported in 3.4+
+
+<p class="options-api">
+In case you need it, you can get the previous value returned by the computed property accessing
+the second argument of the getter:
+</p>
+
+<p class="composition-api">
+In case you need it, you can get the previous value returned by the computed property accessing
+the first argument of the getter:
+</p>
+
+<div class="options-api">
+
+```js
+export default {
+  data() {
+    return {
+      count: 2
+    }
+  },
+  computed: {
+    // This computed will return the value of count when it's less or equal to 3.
+    // When count is >=4, the last value that fulfilled our condition will be returned
+    // instead until count is less or equal to 3
+    alwaysSmall(_, previous) {
+      if (this.count <= 3) {
+        return this.count
+      }
+
+      return previous
+    }
+  }
+}
+```
+</div>
+
+<div class="composition-api">
+
+```vue
+<script setup>
+import { ref, computed } from 'vue'
+
+const count = ref(2)
+
+// This computed will return the value of count when it's less or equal to 3.
+// When count is >=4, the last value that fulfilled our condition will be returned
+// instead until count is less or equal to 3
+const alwaysSmall = computed((previous) => {
+  if (count.value <= 3) {
+    return count.value
+  }
+
+  return previous
+})
+</script>
+```
+</div>
+
+In case you're using a writable computed:
+
+<div class="options-api">
+
+```js
+export default {
+  data() {
+    return {
+      count: 2
+    }
+  },
+  computed: {
+    alwaysSmall: {
+      get(_, previous) {
+        if (this.count <= 3) {
+          return this.count
+        }
+
+        return previous;
+      },
+      set(newValue) {
+        this.count = newValue * 2
+      }
+    }
+  }
+}
+```
+
+</div>
+<div class="composition-api">
+
+```vue
+<script setup>
+import { ref, computed } from 'vue'
+
+const count = ref(2)
+
+const alwaysSmall = computed({
+  get(previous) {
+    if (count.value <= 3) {
+      return count.value
+    }
+
+    return previous
+  },
+  set(newValue) {
+    count.value = newValue * 2
+  }
+})
+</script>
+```
+
+</div>
+## Getting the Previous Value {#previous}
+
+- Only supported in 3.4+
+
+<p class="options-api">
+In case you need it, you can get the previous value returned by the computed property accessing
+the second argument of the getter:
+</p>
+
+<p class="composition-api">
+In case you need it, you can get the previous value returned by the computed property accessing
+the first argument of the getter:
+</p>
+
+<div class="options-api">
+
+```js
+export default {
+  data() {
+    return {
+      count: 2
+    }
+  },
+  computed: {
+    // This computed will return the value of count when it's less or equal to 3.
+    // When count is >=4, the last value that fulfilled our condition will be returned
+    // instead until count is less or equal to 3
+    alwaysSmall(_, previous) {
+      if (this.count <= 3) {
+        return this.count
+      }
+
+      return previous
+    }
+  }
+}
+```
+</div>
+
+<div class="composition-api">
+
+```vue
+<script setup>
+import { ref, computed } from 'vue'
+
+const count = ref(2)
+
+// This computed will return the value of count when it's less or equal to 3.
+// When count is >=4, the last value that fulfilled our condition will be returned
+// instead until count is less or equal to 3
+const alwaysSmall = computed((previous) => {
+  if (count.value <= 3) {
+    return count.value
+  }
+
+  return previous
+})
+</script>
+```
+</div>
+
+In case you're using a writable computed:
+
+<div class="options-api">
+
+```js
+export default {
+  data() {
+    return {
+      count: 2
+    }
+  },
+  computed: {
+    alwaysSmall: {
+      get(_, previous) {
+        if (this.count <= 3) {
+          return this.count
+        }
+
+        return previous;
+      },
+      set(newValue) {
+        this.count = newValue * 2
+      }
+    }
+  }
+}
+```
+
+</div>
+<div class="composition-api">
+
+```vue
+<script setup>
+import { ref, computed } from 'vue'
+
+const count = ref(2)
+
+const alwaysSmall = computed({
+  get(previous) {
+    if (count.value <= 3) {
+      return count.value
+    }
+
+    return previous
+  },
+  set(newValue) {
+    count.value = newValue * 2
+  }
+})
+</script>
+```
 
 </div>
 

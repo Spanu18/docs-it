@@ -47,7 +47,7 @@ Ora, lo stato verraà conservato durante lo switch dei componenti:
 </div>
 
 :::tip
-Quando utilizzato nei [template DOM](/guide/essentials/component-basics#dom-template-parsing-caveats), dovrebbe essere referenziato come `<keep-alive>`.
+Quando utilizzato nei [template in-DOM](/guide/essentials/component-basics#in-dom-template-parsing-caveats), dovrebbe essere referenziato come `<keep-alive>`.
 :::
 
 ## Includi / Escludi {#include-exclude}
@@ -79,7 +79,7 @@ Dalla versione 3.2.34, un Componente Single-File (SFC) che utilizza `<script set
 
 ## Numero Massimo di Istanze Memorizzate {#max-cached-instances}
 
-Possiamo limitare il numero massimo di istanze del componente che possono essere memorizzate nella cache tramite la prop `max`. Quando `max` è specificata, `<KeepAlive>` si comporta come una [cache LRU](<https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)>): se il numero di istanze memorizzate nella cache sta per superare il conteggio massimo specificato, l'istanza meno recente, memorizzata nella cache, verrà distrutta per fare spazio a quella nuova.
+Possiamo limitare il numero massimo di istanze del componente che possono essere memorizzate nella cache tramite la prop `max`. Quando `max` è specificata, `<KeepAlive>` si comporta come una [cache LRU](<https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used_(LRU)>): se il numero di istanze memorizzate nella cache sta per superare il conteggio massimo specificato, l'istanza meno recente, memorizzata nella cache, verrà distrutta per fare spazio a quella nuova.
 
 ```vue-html
 <KeepAlive :max="10">

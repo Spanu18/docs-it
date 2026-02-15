@@ -13,6 +13,7 @@ export interface Sponsor {
   img: string
   name: string
   description?: string
+  priority?: boolean
 }
 
 export interface SponsorData {
@@ -27,7 +28,7 @@ export interface SponsorData {
 export const data = ref<SponsorData>()
 export const pending = ref<boolean>(false)
 
-export const base = `https://sponsors.vuejs.org`
+export const base = `https://automation.vuejs.org`
 
 export const load = async () => {
   if (!pending.value) {

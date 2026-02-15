@@ -7,6 +7,10 @@ sponsors: false
 
 <script setup>
 import SponsorsGroup from '@theme/components/SponsorsGroup.vue'
+import { load, data } from '@theme/components/sponsors'
+import { onMounted } from 'vue'
+
+onMounted(load)
 </script>
 
 # Diventa uno sponsor di Vue.js {#become-a-vue-js-sponsor}
@@ -18,11 +22,11 @@ Il notevole sforzo per mantenere un ecosistema così grande e sviluppare nuove f
 
 Le sponsorizzazioni possono essere effettuate tramite [GitHub Sponsors](https://github.com/sponsors/yyx990803) o [OpenCollective](https://opencollective.com/vuejs). Le fatture possono essere ottenute tramite il sistema di pagamento di GitHub. Sono accettate sia le donazioni ricorrenti mensili che le donazioni una tantum. Le sponsorizzazioni ricorrenti danno diritto all'inserimento del proprio logo come specificato in [Livelli di Sponsorizzazione](#tier-benefits).
 
-Se hai domande riguardo ai livelli, alla logistica dei pagamenti o alle informazioni sulla visibilità della sponsorizzazione, non esitare a contattarci a [sponsor@vuejs.org](mailto:sponsor@vuejs.org).
+Se hai domande riguardo ai livelli, alla logistica dei pagamenti o alle informazioni sulla visibilità della sponsorizzazione, non esitare a contattarci a [sponsor@vuejs.org](mailto:sponsor@vuejs.org?subject=Vue.js%20sponsorship%20inquiry).
 
 ## Sponsorizzare Vue come azienda {#sponsoring-vue-as-a-business}
 
-Sponsorizzare Vue ti offre una grande visibilità presso oltre **1.7 milioni** di sviluppatori Vue in tutto il mondo attraverso il nostro sito web e i README del nostro progetto su GitHub. Inoltre, sostenere l'OSS migliora la reputazione del tuo marchio, aspetto fondamentale per qualsiasi azienda che interagisce con gli sviluppatori.
+Sponsorizzare Vue ti offre una grande visibilità presso oltre **2 milioni** di sviluppatori Vue in tutto il mondo attraverso il nostro sito web e i README del nostro progetto su GitHub. Questo non solo genera lead direttamente, ma migliora anche la riconoscibilità del tuo brand come azienda attenta all'Open Source. Si tratta di una risorsa intangibile ma estremamente importante per le aziende che realizzano prodotti per sviluppatori, poiché migliora il tasso di conversione.
 
 Se stai utilizzando Vue per creare un prodotto che genera entrate, ha senso dal punto di vista commerciale sponsorizzare lo sviluppo di Vue: **assicura che il progetto su cui il tuo prodotto si basa rimanga solido e attivamente mantenuto.** L'esposizione e l'immagine positiva del tuo brand nella comunità Vue facilitano anche l'attrazione e il reclutamento di sviluppatori Vue.
 
@@ -36,24 +40,25 @@ Puoi anche cercare di convincere il tuo datore di lavoro a sponsorizzare Vue com
 
 ## Benefici dei livelli {#tier-benefits}
 
-- **Global Special**:
-  - Limitato a uno sponsor a livello globale (attualmente occupato).
-  - Inserimento in esclusiva del logo in risalto nella parte alta della pagina (above the fold) sulla pagina principale [vuejs.org](/).
-  - Posizionamento del logo in maggiore rilievo in tutte le posizioni dei livelli sottostanti.
-- **Platinum (USD$2,000/mo)**:
+- **Sponsor speciale globale**:
+  - Limitato a **uno** sponsor a livello globale. <span v-if="!data?.special">Attualmente vacante. [Mettiti in contatto](mailto:sponsor@vuejs.org?subject=Vue.js%20special%20sponsor%20inquiry)!</span><span v-else>(Attualmente occupato)</span>
+  - (Esclusivo) Posizionamento del logo **above the fold** sulla prima pagina di [vuejs.org](/).
+  - (Esclusivo) Ringraziamenti speciali e retweet regolari dei principali lanci di prodotti tramite l' [l'account ufficiale di Vue su X](https://x.com/vuejs) (320k followers).
+  - Posizionamento del logo più visibile in tutte le posizioni dei livelli inferiori.
+- **Platino (USD$2,000/mo)**:
   - Inserimento di un logo in risalto sulla pagina principale di [vuejs.org](/).
   - Inserimento di un logo in risalto nella sidebar di tutte le pagine di contenuto.
   - Inserimento di un logo in risalto nel README di [`vuejs/core`](https://github.com/vuejs/core) e [`vuejs/vue`](https://github.com/vuejs/core).
-- **Gold (USD$500/mo)**:
+- **Oro (USD$500/mo)**:
   - Inserimento di un logo Grande sulla pagina principale di [vuejs.org](/).
   - Inserimento di un logo Grande nel README di `vuejs/core` e `vuejs/vue`.
-- **Silver (USD$250/mo)**:
+- **Argento (USD$250/mo)**:
   - Inserimento di un logo medio nel file `BACKERS.md` di `vuejs/core` e `vuejs/vue`.
-- **Bronze (USD$100/mo)**:
+- **Bronzo (USD$100/mo)**:
   - Inserimento di un logo piccolo nel file `BACKERS.md` di `vuejs/core` e `vuejs/vue`.
-- **Generous Backer (USD$50/mo)**:
+- **Sostenitore generoso (USD$50/mo)**:
   - Nome elencato nel file `BACKERS.md` di `vuejs/core` e `vuejs/vue`, sopra gli altri sostenitori individuali.
-- **Individual Backer (USD$5/mo)**:
+- **Sostenitore individuale (USD$5/mo)**:
   - Nome elencato nel file `BACKERS.md` di `vuejs/core` e `vuejs/vue`.
 
 ## Sponsor attuali {#current-sponsors}

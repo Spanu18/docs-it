@@ -1,5 +1,9 @@
 # TypeScript con Composition API {#typescript-with-composition-api}
 
+<ScrimbaLink href="https://scrimba.com/links/vue-ts-composition-api" title="Free Vue.js TypeScript with Composition API Lesson" type="scrimba">
+  Watch an interactive video lesson on Scrimba
+</ScrimbaLink>
+
 > Si presume che tu abbia già letto [Usare Vue con TypeScript](./overview).
 
 ## Tipizzare le props dei componenti {#typing-component-props}
@@ -51,6 +55,16 @@ const props = defineProps<Props>()
 </script>
 ```
 
+This also works if `Props` is imported from an external source. This feature requires TypeScript to be a peer dependency of Vue.
+
+```vue
+<script setup lang="ts">
+import type { Props } from './foo'
+
+const props = defineProps<Props>()
+</script>
+```
+
 #### Limiti della sintassi {#syntax-limitations}
 
 Nella versione 3.2 e precedenti, il parametro di tipo generico per `defineProps()` era limitato a un tipo letterale o a un riferimento a un'interfaccia locale.
@@ -59,10 +73,21 @@ Questo limite è stato risolto nella versione 3.3. L'ultima versione di Vue supp
 
 ### Valori default delle props {#props-default-values}
 
-Quando si utilizza la dichiarazione basata sui tipi, perdiamo la possibilità di dichiarare valori di default per le props. Questo può essere risolto utilizzando la macro del compilatore `withDefaults`:
+uando si utilizza la dichiarazione basata sui tipi, perdiamo la possibilità di dichiarare valori di default per le props. Questo può essere risolto utilizzando [Reactive Props Destructure](/guide/components/props#reactive-props-destructure) <sup class="vt-badge" data-text="3.5+" />:
 
 ```ts
-export interface Props {
+interface Props {
+  msg?: string
+  labels?: string[]
+}
+
+const { msg = 'hello', labels = ['one', 'two'] } = defineProps<Props>()
+```
+
+In 3.4 and below, Reactive Props Destructure is not enabled by default. An alternative is to use the `withDefaults` compiler macro:
+
+```ts
+interface Props {
   msg?: string
   labels?: string[]
 }
@@ -74,6 +99,10 @@ const props = withDefaults(defineProps<Props>(), {
 ```
 
 Questo verrà compilato con opzioni di runtime `default` equivalenti per le props. Inoltre, l'helper `withDefaults` fornisce controlli di tipo per i valori di default e garantisce che il tipo restituito di `props` abbia i flag opzionali rimossi per le proprietà che hanno valori di default dichiarati.
+
+:::info
+Note that default values for mutable reference types (like arrays or objects) should be wrapped in functions when using `withDefaults` to avoid accidental modification and external side effects. This ensures each component instance gets its own copy of the default value. This is **not** necessary when using default values with destructure.
+:::
 
 ### Senza `<script setup>` {#without-script-setup}
 
@@ -143,6 +172,18 @@ Con lo `<script setup>`, la funzione `emit`  può essere tipizzata usando la dic
 <script setup lang="ts">
 // runtime
 const emit = defineEmits(['change', 'update'])
+
+// options based
+const emit = defineEmits({
+  change: (id: number) => {
+    // return `true` or `false` to indicate
+    // validation pass / fail
+  },
+  update: (value: string) => {
+    // return `true` or `false` to indicate
+    // validation pass / fail
+  }
+})
 
 // dichiarazione del tipo
 const emit = defineEmits<{
@@ -335,6 +376,17 @@ const foo = inject('foo') as string
 
 ## Tipizzare i Template Refs {#typing-template-refs}
 
+With Vue 3.5 and `@vue/language-tools` 2.1 (powering both the IDE language service and `vue-tsc`), the type of refs created by `useTemplateRef()` in SFCs can be **automatically inferred** for static refs based on what element the matching `ref` attribute is used on.
+
+In cases where auto-inference is not possible, you can still cast the template ref to an explicit type via the generic argument:
+
+```ts
+const el = useTemplateRef<HTMLInputElement>('el')
+```
+
+<details>
+<summary>Usage before 3.5</summary>
+
 I template refs dovrebbero essere creati con un argomento di tipo generico esplicito e un valore iniziale d `null`:
 
 ```vue
@@ -353,19 +405,51 @@ onMounted(() => {
 </template>
 ```
 
+</details>
+
+To get the right DOM interface you can check pages like [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#technical_summary).
+
 Nota che per garantire una sicurezza di tipo rigorosa, è necessario utilizzare l'optional chaining o i type guards quando si accede a `el.value`. Questo perché il valore iniziale del riferimento è `null` fino a quando il componente non viene montato, e può anche essere impostato a `null` se l'elemento referenziato viene smontato da un `v-if`.
 
 ## Tipizzare i Template Refs dei componenti {#typing-component-template-refs}
 
 A volte potresti dover annotare un riferimento al template per un componente figlio al fine di chiamare il suo metodo. Qui, abbiamo un componente figlio `MyModal` con un metodo che apre il modal:
 
-```vue
-<!-- MyModal.vue -->
+```vue{6,7} [App.vue]
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
+import Foo from './Foo.vue'
+import Bar from './Bar.vue'
+
+type FooType = InstanceType<typeof Foo>
+type BarType = InstanceType<typeof Bar>
+
+const compRef = useTemplateRef<FooType | BarType>('comp')
+</script>
+
+<template>
+  <component :is="Math.random() > 0.5 ? Foo : Bar" ref="comp" />
+</template>
+```
+
+In cases where the exact type of the component isn't available or isn't important, `ComponentPublicInstance` can be used instead. This will only include properties that are shared by all components, such as `$el`:
+
+```ts
+import { useTemplateRef } from 'vue'
+import type { ComponentPublicInstance } from 'vue'
+
+const child = useTemplateRef<ComponentPublicInstance>('child')
+```
+
+In cases where the component referenced is a [generic component](/guide/typescript/overview.html#generic-components), for instance `MyGenericModal`:
+
+```vue [MyGenericModal.vue]
+<script setup lang="ts" generic="ContentType extends string | number">
 import { ref } from 'vue'
 
-const isContentShown = ref(false)
-const open = () => (isContentShown.value = true)
+const content = ref<ContentType | null>(null)
+
+const open = (newContent: ContentType) => (content.value = newContent)
 
 defineExpose({
   open
@@ -373,28 +457,59 @@ defineExpose({
 </script>
 ```
 
-Per ottenere il tipo dell'istanza di `MyModal`, è necessario prima ottenere il suo tipo tramite `typeof`, e quindi utilizzare `InstanceType` per estrarre il suo tipo di istanza:
+It needs to be referenced using `ComponentExposed` from the [`vue-component-type-helpers`](https://www.npmjs.com/package/vue-component-type-helpers) library as `InstanceType` won't work.
 
-```vue{5}
-<!-- App.vue -->
+```vue [App.vue]
 <script setup lang="ts">
-import MyModal from './MyModal.vue'
+import { useTemplateRef } from 'vue'
+import MyGenericModal from './MyGenericModal.vue'
+import type { ComponentExposed } from 'vue-component-type-helpers'
 
-const modal = ref<InstanceType<typeof MyModal> | null>(null)
+const modal =
+  useTemplateRef<ComponentExposed<typeof MyGenericModal>>('modal')
 
 const openModal = () => {
-  modal.value?.open()
+  modal.value?.open('newValue')
 }
 </script>
 ```
 
-Nota che se vuoi utilizzare questa tecnica nei file TypeScript invece che nei file Vue SFC, devi abilitare la modalità di Volar [Takeover](./overview#volar-takeover-mode).
+Note that with `@vue/language-tools` 2.1+, static template refs' types can be automatically inferred and the above is only needed in edge cases.
 
-Nei casi in cui il tipo esatto del componente non è disponibile o non è importante, è possibile utilizzare `ComponentPublicInstance`. Questo includerà solo le proprietà condivise da tutti i componenti, come ad esempio `$el`:
+## Typing Global Custom Directives {#typing-global-custom-directives}
 
-```ts
-import { ref } from 'vue'
-import type { ComponentPublicInstance } from 'vue'
+In order to get type hints and type checking for global custom directives declared with `app.directive()`, you can extend `GlobalDirectives`
 
-const child = ref<ComponentPublicInstance | null>(null)
+```ts [src/directives/highlight.ts]
+import type { Directive } from 'vue'
+
+export type HighlightDirective = Directive<HTMLElement, string>
+
+declare module 'vue' {
+  export interface GlobalDirectives {
+    // prefix with v (v-highlight)
+    vHighlight: HighlightDirective
+  }
+}
+
+export default {
+  mounted: (el, binding) => {
+    el.style.backgroundColor = binding.value
+  }
+} satisfies HighlightDirective
+```
+
+```ts [main.ts]
+import highlight from './directives/highlight'
+// ...other code
+const app = createApp(App)
+app.directive('highlight', highlight)
+```
+
+Usage in component
+
+```vue [App.vue]
+<template>
+  <p v-highlight="'blue'">This sentence is important!</p>
+</template>
 ```

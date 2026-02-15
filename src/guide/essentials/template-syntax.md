@@ -1,5 +1,9 @@
 # La Sintassi del Template {#template-syntax}
 
+<ScrimbaLink href="https://scrimba.com/links/vue-template-syntax" title="Free Vue.js Template Syntax Lesson" type="scrimba">
+  Watch an interactive video lesson on Scrimba
+</ScrimbaLink>
+
 Vue utilizza una sintassi di template basata su HTML che ti permette in maniera dichiarativa di legare il DOM renderizzato con i dati dell'istanza del componente sottostante. Tutti i template Vue sono HTML sintatticamente valido che possono essere letti da parser e da browser conformi alle specifiche HTML.
 
 Sotto il cofano, Vue compila i template in codice JavaScript altamente ottimizzato. Combinato con il sistema di reattività, Vue può capire in maniera intelligente il numero minimo di componenti da ri-renderizzare e applicare il minimo numero di modifiche al DOM quando cambia lo stato dell'app.
@@ -64,6 +68,22 @@ Gli attributi che iniziano con `:` possono sembrare un po' diversi dall'HTML nor
 
 > Per il resto della guida, negli esempi di codice utilizzeremo la sintassi abbreviata, dato che è l'uso più comune per gli sviluppatori Vue.
 
+### Same-name Shorthand {#same-name-shorthand}
+
+- Only supported in 3.4+
+
+If the attribute has the same name as the variable name of the JavaScript value being bound, the syntax can be further shortened to omit the attribute value:
+
+```vue-html
+<!-- same as :id="id" -->
+<div :id></div>
+
+<!-- this also works -->
+<div v-bind:id></div>
+```
+
+This is similar to the property shorthand syntax when declaring objects in JavaScript. Note this is a feature that is only available in Vue 3.4 and above.
+
 ### Attributi Booleani {#boolean-attributes}
 
 Gli [Attributi Booleani](https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes) sono attributi che possono indicare valori veri / falsi con la loro presenza su un elemento. Ad esempio,[`disabled`](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/disabled) è uno degli attributi booleani più comunemente utilizzati.
@@ -85,7 +105,8 @@ Se hai un oggetto JavaScript che rappresenta attributi multipli che assomiglia a
 ```js
 const objectOfAttrs = {
   id: 'container',
-  class: 'wrapper'
+  class: 'wrapper',
+  style: 'background-color:green'
 }
 ```
 
@@ -176,7 +197,7 @@ I valori degli attributi delle direttive dovrebbero essere singole espressioni J
 <p v-if="seen">Ora mi vedi</p>
 ```
 
-Qui, la direttiva `v-if` può rimuovere / inserire l'elemento `<p>` in base alla veridicità del valore dell'espressione `seen`.
+Qui, la direttiva `v-if` può rimuovere o inserire l'elemento `<p>` in base alla veridicità del valore dell'espressione `seen`.
 
 ### Arguments {#arguments}
 
@@ -225,7 +246,7 @@ Allo stesso modo puoi utilizzare argomenti dinamici per collegare un handler (ge
 <a v-on:[eventName]="doSomething"> ... </a>
 
 <!-- shorthand -->
-<a @[eventName]="doSomething">
+<a @[eventName]="doSomething"> ... </a>
 ```
 
 In questo esempio, quando il valore di `eventName` è `"focus"`, `v-on:[eventName]` sarà equivalente a `v-on:focus`.

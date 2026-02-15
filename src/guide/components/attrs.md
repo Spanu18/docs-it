@@ -14,7 +14,7 @@ Quando un componente renderizza un singolo elemento radice, gli attributi fallth
 
 ```vue-html
 <!-- template di <MyButton> -->
-<button>cliccami</button>
+<button>Cliccami</button>
 ```
 
 E un genitore che utilizza questo componente con:
@@ -26,7 +26,7 @@ E un genitore che utilizza questo componente con:
 Il DOM renderizzato finale sarebbe:
 
 ```html
-<button class="large">cliccami</button>
+<button class="large">Cliccami</button>
 ```
 
 Qui, `<MyButton>` non ha dichiarato `class` come prop accettata. Pertanto, `class` è trattata come attributo fallthrough e viene automaticamente aggiunta all'elemento radice di  `<MyButton>`.
@@ -37,13 +37,13 @@ Se l'elemento radice del componente figlio ha già attributi `class` o `style` e
 
 ```vue-html
 <!-- template di <MyButton> -->
-<button class="btn">cliccami</button>
+<button class="btn">Cliccami</button>
 ```
 
 Quindi il DOM renderizzato finale diventerebbe:
 
 ```html
-<button class="btn large">cliccami</button>
+<button class="btn large">Cliccami</button>
 ```
 
 ### Eredità dei Listener `v-on` {#v-on-listener-inheritance}
@@ -112,7 +112,7 @@ Utilizzando l'esempio del componente `<MyButton>` dalla [sezione precedente](#at
 
 ```vue-html
 <div class="btn-wrapper">
-  <button class="btn">cliccami</button>
+  <button class="btn">Cliccami</button>
 </div>
 ```
 
@@ -120,7 +120,7 @@ Vogliamo che tutti gli attributi fallthrough come `class` e i listener `v-on` ve
 
 ```vue-html{2}
 <div class="btn-wrapper">
-  <button class="btn" v-bind="$attrs">cliccami</button>
+  <button class="btn" v-bind="$attrs">Cliccami</button>
 </div>
 ```
 

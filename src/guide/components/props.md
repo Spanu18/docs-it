@@ -117,6 +117,71 @@ Più dettagli: [Typing Component Props](/guide/typescript/composition-api#typing
 
 </div>
 
+<div class="composition-api">
+
+## Reactive Props Destructure <sup class="vt-badge" data-text="3.5+" /> \*\* {#reactive-props-destructure}
+
+Vue's reactivity system tracks state usage based on property access. E.g. when you access `props.foo` in a computed getter or a watcher, the `foo` prop gets tracked as a dependency.
+
+So, given the following code:
+
+```js
+const { foo } = defineProps(['foo'])
+
+watchEffect(() => {
+  // runs only once before 3.5
+  // re-runs when the "foo" prop changes in 3.5+
+  console.log(foo)
+})
+```
+
+In version 3.4 and below, `foo` is an actual constant and will never change. In version 3.5 and above, Vue's compiler automatically prepends `props.` when code in the same `<script setup>` block accesses variables destructured from `defineProps`. Therefore the code above becomes equivalent to the following:
+
+```js {5}
+const props = defineProps(['foo'])
+
+watchEffect(() => {
+  // `foo` transformed to `props.foo` by the compiler
+  console.log(props.foo)
+})
+```
+
+In addition, you can use JavaScript's native default value syntax to declare default values for the props. This is particularly useful when using the type-based props declaration:
+
+```ts
+const { foo = 'hello' } = defineProps<{ foo?: string }>()
+```
+
+If you prefer to have more visual distinction between destructured props and normal variables in your IDE, Vue's VSCode extension provides a setting to enable inlay-hints for destructured props.
+
+### Passing Destructured Props into Functions {#passing-destructured-props-into-functions}
+
+When we pass a destructured prop into a function, e.g.:
+
+```js
+const { foo } = defineProps(['foo'])
+
+watch(foo, /* ... */)
+```
+
+This will not work as expected because it is equivalent to `watch(props.foo, ...)` - we are passing a value instead of a reactive data source to `watch`. In fact, Vue's compiler will catch such cases and throw a warning.
+
+Similar to how we can watch a normal prop with `watch(() => props.foo, ...)`, we can watch a destructured prop also by wrapping it in a getter:
+
+```js
+watch(() => foo, /* ... */)
+```
+
+In addition, this is the recommended approach when we need to pass a destructured prop into an external function while retaining reactivity:
+
+```js
+useComposable(() => foo)
+```
+
+The external function can call the getter (or normalize it with [toValue](/api/reactivity-utilities.html#tovalue)) when it needs to track changes of the provided prop, e.g. in a computed or watcher getter.
+
+</div>
+
 ## Dettagli sul passaggio delle Props {#prop-passing-details}
 
 ### Casing dei nomi delle Props {#prop-name-casing}
@@ -148,7 +213,7 @@ export default {
 <span>{{ greetingMessage }}</span>
 ```
 
-Tecnicamente, puoi anche utilizzare camelCase quando passi props a un componente figlio (ad eccezione dei [template DOM](/guide/essentials/component-basics#dom-template-parsing-caveats)). Tuttavia, la convenzione è utilizzare kebab-case in tutti i casi per allinearsi agli attributi HTML:
+Tecnicamente, puoi anche utilizzare camelCase quando passi props a un componente figlio (ad eccezione dei [template in-DOM](/guide/essentials/component-basics#dom-template-parsing-caveats)). Tuttavia, la convenzione è utilizzare kebab-case in tutti i casi per allinearsi agli attributi HTML:
 
 ```vue-html
 <MyComponent greeting-message="hello" />
@@ -389,13 +454,18 @@ defineProps({
     type: String,
     required: true
   },
-  // Numero con un valore predefinito
+  // Required but nullable string
   propD: {
+    type: [String, null],
+    required: true
+  },
+  // Numero con un valore predefinito
+  propE: {
     type: Number,
     default: 100
   },
   // Oggetto con un valore predefinito
-  propE: {
+  propF: {
     type: Object,
   // I valori predefiniti degli oggetti o degli array devono essere restituiti da
   // una funzione factory. La funzione riceve come argomento le props grezze
@@ -405,14 +475,15 @@ defineProps({
   }
 },
   // Funzione di validazione personalizzata
-  propF: {
-    validator(value) {
+  // full props passed as 2nd argument in 3.4+
+  propG: {
+    validator(value, props) {
   // Il valore deve corrispondere a una di queste stringhe
       return ['success', 'warning', 'danger'].includes(value)
     }
   },
   // Funzione con un valore predefinito
-  propG: {
+  propH: {
     type: Function,
     // A differenza dei valori predefiniti degli oggetti o degli array, questa non è una
     // funzione "factory" - questa è una funzione da utilizzare come valore predefinito
@@ -443,13 +514,18 @@ export default {
       type: String,
       required: true
     },
-    // Numero con un valore default 
+    // Required but nullable string
     propD: {
+      type: [String, null],
+      required: true
+    },
+    // Numero con un valore default 
+    propE: {
       type: Number,
       default: 100
     },
     // Oggetto con un valore default 
-    propE: {
+    propF: {
       type: Object,
       // I valori predefiniti degli oggetti o degli array devono essere restituiti da
       // una funzione factory. La funzione riceve come argomento le props grezze
@@ -459,16 +535,17 @@ export default {
       }
     },
     // funzione custom `validator`
-    propF: {
-      validator(value) {
+    // full props passed as 2nd argument in 3.4+
+    propG: {
+      validator(value, props) {
         // Il valore deve corrispondere a una di queste stringhe
         return ['success', 'warning', 'danger'].includes(value)
       }
     },
     // Funzione con un valore default
-    propG: {
+    propH: {
       type: Function,
-      // A differenza dei valori predefiniti degli oggetti o degli array, questa non è una 
+      // A differenza dei valori predefiniti degli oggetti o degli array, questa non è una
       // funzione factory - questa è una funzione da utilizzare come valore predefinito
       default() {
         return 'Default function'
@@ -517,6 +594,7 @@ Il `type` può essere uno dei seguenti costruttori nativi:
 - `Date`
 - `Function`
 - `Symbol`
+- `Error`
 
 Inoltre, `type` può anche essere una classe personalizzata o una funzione costruttrice e la verifica verrà effettuata con un controllo `instanceof` check. Ad esempio, data la seguente classe:
 
@@ -553,6 +631,39 @@ export default {
 </div>
 
 Vue utilizzerà  `instanceof Person` per validare se il valore della prop `author` è effettivamente un'istanza della classe `Person`.
+
+### Nullable Type {#nullable-type}
+
+If the type is required but nullable, you can use the array syntax that includes `null`:
+
+<div class="composition-api">
+
+```js
+defineProps({
+  id: {
+    type: [String, null],
+    required: true
+  }
+})
+```
+
+</div>
+<div class="options-api">
+
+```js
+export default {
+  props: {
+    id: {
+      type: [String, null],
+      required: true
+    }
+  }
+}
+```
+
+</div>
+
+Note that if `type` is just `null` without using the array syntax, it will allow any type.
 
 ## Conversione in Booleano {#boolean-casting}
 
@@ -598,17 +709,17 @@ Quando una prop è dichiarata per consentire più tipi, le regole di conversione
 defineProps({
   disabled: [Boolean, Number]
 })
-  
+
 // disabled verrà convertito in true
 defineProps({
   disabled: [Boolean, String]
 })
-  
+
 // disabled verrà convertito in true
 defineProps({
   disabled: [Number, Boolean]
 })
-  
+
 
 defineProps({
   disabled: [String, Boolean]
@@ -625,21 +736,21 @@ export default {
     disabled: [Boolean, Number]
   }
 }
-  
+
 // disabled verrà convertito in true
 export default {
   props: {
     disabled: [Boolean, String]
   }
 }
-  
+
 // disabled verrà convertito in true
 export default {
   props: {
     disabled: [Number, Boolean]
   }
 }
-  
+
 // disabled verrà interpretato come una stringa vuota (disabled="")
 export default {
   props: {

@@ -40,8 +40,7 @@ Per comprendere meglio come creare i tuoi plugin Vue.js, creeremo una versione m
 
 Iniziamo impostando l'oggetto del plugin. Si consiglia di crearlo in un file separato ed esportarlo, come mostrato di seguito, per mantenere la logica isolata e distinta.
 
-```js
-// plugins/i18n.js
+```js [plugins/i18n.js]
 export default {
   install: (app, options) => {
     // Il codice del plugin va qui
@@ -57,8 +56,7 @@ Vogliamo creare una funzione di traduzione. Questa funzione riceverà una string
 
 Poiché questa funzione dovrebbe essere disponibile globalmente in tutti i template, la renderemo tale collegandola a `app.config.globalProperties` nel nostro plugin:
 
-```js{4-11}
-// plugins/i18n.js
+```js{3-10} [plugins/i18n.js]
 export default {
   install: (app, options) => {
     // inietta un metodo $translate() disponibile globalmente
@@ -97,18 +95,11 @@ Utilizza le proprietà globali con parsimonia, poiché l'uso eccessivo di molte 
 
 ### Provide / Inject con i Plugin {#provide-inject-with-plugins}
 
-I plugin ci permettono di usare anche `inject` per fornire una funzione o un attributo agli utenti del plugin. Ad esempio, possiamo consentire all'applicazione di accedere al parametro `options` per poter utilizzare l'oggetto delle traduzioni.
+Plugins also allow us to use `provide` to give plugin users access to a function or attribute. For example, we can allow the application to have access to the `options` parameter to be able to use the translations object.
 
-```js{10}
-// plugins/i18n.js
+```js{3} [plugins/i18n.js]
 export default {
   install: (app, options) => {
-    app.config.globalProperties.$translate = (key) => {
-      return key.split('.').reduce((o, i) => {
-        if (o) return o[i]
-      }, options)
-    }
-
     app.provide('i18n', options)
   }
 }
@@ -118,7 +109,7 @@ Gli utenti del plugin, ora, saranno in grado di iniettare le opzioni (del plugin
 
 <div class="composition-api">
 
-```vue
+```vue{4}
 <script setup>
 import { inject } from 'vue'
 
@@ -131,7 +122,7 @@ console.log(i18n.greetings.hello)
 </div>
 <div class="options-api">
 
-```js
+```js{2}
 export default {
   inject: ['i18n'],
   created() {
@@ -141,3 +132,7 @@ export default {
 ```
 
 </div>
+
+### Bundle for NPM
+
+If you further want to build and publish your plugin for others to use, see [Vite's section on Library Mode](https://vite.dev/guide/build.html#library-mode).

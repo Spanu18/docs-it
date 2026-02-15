@@ -1,5 +1,8 @@
 <script lang="ts">
-const shuffleMembers = (members: Member[], pinTheFirstMember = false): void => {
+const shuffleMembers = (
+  members: Member[],
+  pinTheFirstMember = false
+): void => {
   let offset = pinTheFirstMember ? 1 : 0
   // `i` is between `1` and `length - offset`
   // `j` is between `0` and `length - offset - 1`
@@ -7,11 +10,8 @@ const shuffleMembers = (members: Member[], pinTheFirstMember = false): void => {
   // `offset + j` is between `offset` and `length - 1`
   let i = members.length - offset
   while (i > 0) {
-    const j = Math.floor(Math.random() * i);
-    [
-      members[offset + i - 1],
-      members[offset + j]
-    ] = [
+    const j = Math.floor(Math.random() * i)
+    ;[members[offset + i - 1], members[offset + j]] = [
       members[offset + j],
       members[offset + i - 1]
     ]
@@ -38,7 +38,7 @@ shuffleMembers(membersPartnerData as Member[])
     <TeamHero>
       <template #title>Vieni a conoscere il Team</template>
       <template #lead
-        >Lo sviluppo di Vue ed il suo ecosistema sono guidati da un team multi-etnico proveniente da ogni parte del mondo, alcuni di loro hanno scelto di essere
+        >Lo sviluppo di Vue ed il suo ecosistema sono guidati da un team internazionale, alcuni dei quali hanno scelto di essere
         <span class="nowrap">menzionati qui sotto.</span></template
       >
 
@@ -47,11 +47,13 @@ shuffleMembers(membersPartnerData as Member[])
           href="https://github.com/vuejs/governance/blob/master/Team-Charter.md"
           >Scopri di più sui teams</VTLink
         >
+          Learn more about teams
+        </VTLink>
       </template>
     </TeamHero>
 
-    <TeamList :members="membersCoreData as Member[]">
-      <template #title>Membri fondamentali del team</template>
+    <TeamList :members="(membersCoreData as Member[])">
+      <template #title>Membri Core Team</template>
       <template #lead
         >I membri fondamentali sono quelle persone coinvolte attivamente nella
         manutenzione di uno o più progetti principali. Hanno apportato un  
@@ -59,18 +61,21 @@ shuffleMembers(membersPartnerData as Member[])
       >
     </TeamList>
 
-    <TeamList :members="membersEmeritiData as Member[]">
-      <template #title>Meriti Core Team</template>
-      <template #lead
-        >Qui rendiamo omaggio a alcuni membri del team principale che non sono più attivi ma che hanno fatto preziosi contributi in passato.</template
-      >
+    <TeamList :members="(membersEmeritiData as Member[])">
+      <template #title>Membri Core Team Emeriti</template>
+      <template #lead>
+        Qui rendiamo omaggio a alcuni membri del team principale che non sono più attivi ma che hanno fatto preziosi contributi in passato.
+      </template>
     </TeamList>
 
     <TeamList :members="membersPartnerData as Member[]">
       <template #title>Partner della community</template>
-      <template #lead
-        >Alcuni membri della comunità di Vue hanno arricchito così tanto il progetto da meritare una menzione speciale. Abbiamo sviluppato un rapporto più intimo con questi partner chiave, spesso coordinandoci con loro sulle prossime funzionalità e notizie.</template
-      >
+      <template #lead>
+        Alcuni membri della comunità di Vue hanno arricchito così tanto il progetto da meritare 
+        una menzione speciale. Abbiamo sviluppato un rapporto più intimo 
+        con questi partner chiave, spesso coordinandoci con loro 
+        sulle prossime funzionalità e notizie.
+        </template>
     </TeamList>
   </div>
 </template>

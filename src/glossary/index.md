@@ -153,10 +153,16 @@ Il termine *hoisting* è utilizzato per descrivere l'esecuzione di una sezione d
 
 JavaScript utilizza l'hoisting per alcuni costrutti, come `var`, `import` e dichiarazioni di funzione.
 
-Nel contesto di Vue, il compiler del template applica lo *static hoisting* per migliorare le prestazioni. Quando si converte un template in una render function, i VNodes che corrispondono a contenuti statici possono essere creati una sola volta e poi riutilizzati. Questi VNodes statici vengono descritti come 'hoisted' perché sono creati al di fuori della funzione di rendering, prima che essa venga eseguita. Una forma simile di hoisting viene applicata agli oggetti o array statici generati dal compiler del template.
+In a Vue context, the compiler applies *hoisting* to improve performance. When compiling a component, static values are moved out of the component's scope. These static values are described as 'hoisted' because they are created outside the component.
+
+## cache static {#cache-static}
+
+The term *cache* is used to describe the temporary storage of frequently accessed data to improve performance.
+
+The Vue template compiler identifies those static VNodes, caches them during the initial render, and reuses the same VNodes for every subsequent re-render.
 
 Per maggiori dettagli consulta:
-- [Guida - Il Meccanismo di Rendering - Static Hoisting](/guide/extras/rendering-mechanism.html#static-hoisting)
+- [Guida - Il Meccanismo di Rendering - Cache Static](/guide/extras/rendering-mechanism.html#cache-static)
 
 ## template in-DOM {#in-dom-template}
 
@@ -168,7 +174,7 @@ Tipicamente, un template in-DOM inizia come markup HTML scritto direttamente nel
 
 Per maggiori dettagli consulta:
 - [Guida - Creare un\'applicazione - Template del Componente Root nel DOM](/guide/essentials/application.html#in-dom-root-component-template)
-- [Guida - Nozioni base sui Componenti - Limitazioni nel Parsing dei DOM Template](/guide/essentials/component-basics.html#dom-template-parsing-caveats)
+- [Guida - Nozioni base sui Componenti - in-Limitazioni nel Parsing dei DOM Template](/guide/essentials/component-basics.html#in-dom-template-parsing-caveats)
 - [Options: Rendering - template](/api/options-rendering.html#template)
 
 ## inject {#inject}
@@ -275,7 +281,7 @@ Nel contesto di Vue, la reattività viene utilizzata per descrivere una serie di
 
 Ci sono vari modi in cui un sistema di reattività potrebbe essere implementato. Ad esempio, potrebbe essere realizzato attraverso un'analisi statica del codice per determinare le sue dipendenze. Tuttavia, Vue non utilizza questa forma di sistema di reattività.
 
-Al contrario, il sistema di reattività di Vue tiene traccia dell'accesso alle proprietà a runtime. Lo fa utilizzando sia i 'Proxy wrapper' sia le funzioni getter/setter per le proprietà.
+Al contrario, il sistema di reattività di Vue tiene traccia dell'accesso alle proprietà a runtime. Lo fa utilizzando sia i 'Proxy wrapper' sia le funzioni [getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get#description)/[setter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set#description) per le proprietà.
 
 Per maggiori dettagli consulta:
 - [Guida - Le basi della Reattività](/guide/essentials/reactivity-fundamentals.html)

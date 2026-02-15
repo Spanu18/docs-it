@@ -34,15 +34,15 @@ Viene utilizzato per annotare una prop con tipi più avanzati quando si utilizza
 
 ## MaybeRef\<T> {#mayberef}
 
-Alias per `T | Ref<T>`. Utile per annotare gli argomenti dei [Composables](/guide/reusability/composables.html).
-
 - Supportato solo dalla versione 3.3+.
+
+Alias per `T | Ref<T>`. Utile per annotare gli argomenti dei [Composables](/guide/reusability/composables.html).
 
 ## MaybeRefOrGetter\<T> {#maybereforgetter}
 
-Alias per `T | Ref<T> | (() => T)`. Utile per annotare gli argomenti dei [Composables](/guide/reusability/composables.html).
-
 - Supportato solo dalla versione 3.3+.
+
+Alias per `T | Ref<T> | (() => T)`. Utile per annotare gli argomenti dei [Composables](/guide/reusability/composables.html).
 
 ## ExtractPropTypes\<T> {#extractproptypes}
 
@@ -76,6 +76,8 @@ Per estrarre le props esterne, ovvero le props che il componente genitore è aut
   ```
 
 ## ExtractPublicPropTypes\<T> {#extractpublicproptypes}
+
+- Supportato solo dalla versione 3.3+.
 
 Estrae i type delle prop dall'oggetto delle opzioni delle prop a runtime. I tipi estratti sono rivolti all'esterno - ovvero le props che il componente genitore è autorizzato a passare.
 

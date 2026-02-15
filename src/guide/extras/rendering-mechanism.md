@@ -10,7 +10,7 @@ Come fa Vue a trasformare un template in un nodo del DOM? Come aggiorna questi n
 
 Probabilmente hai sentito parlare del termine "virtual DOM", su cui si basa il sistema di rendering di Vue.
 
-Il DOM virtuale (VDOM) è un concetto di programmazione in cui una rappresentazione ideale, o "virtuale", di un'interfaccia utente viene mantenuta in memoria e sincronizzata con il DOM "reale". Il concetto è stato introdotto da [React](https://reactjs.org/) ed è stato adottato da molti altri framework con diverse implementazioni, tra cui Vue.
+Il DOM virtuale (VDOM) è un concetto di programmazione in cui una rappresentazione ideale, o "virtuale", di un'interfaccia utente viene mantenuta in memoria e sincronizzata con il DOM "reale". Il concetto è stato introdotto da [React](https://react.dev/) ed è stato adottato da molti altri framework con diverse implementazioni, tra cui Vue.
 
 Il DOM virtuale è più un modello che una tecnologia specifica, quindi non esiste un'implementazione canonica. Possiamo illustrare l'idea con un semplice esempio:
 
@@ -68,23 +68,23 @@ Ma non deve essere necessariamente così. In Vue, il framework controlla sia il 
 
 Di seguito, discuteremo alcune importanti ottimizzazioni effettuate dal compilatore di template di Vue per migliorare le prestazioni del DOM virtuale in fase di esecuzione.
 
-### Hoisting statico {#static-hoisting}
+### Cache Static {#cache-static}
 
 Molto spesso ci sono parti di un template che non contengono binding dinamici:
 
 ```vue-html{2-3}
 <div>
-  <div>foo</div> <!-- hoisted -->
-  <div>bar</div> <!-- hoisted -->
+  <div>foo</div> <!-- cached -->
+  <div>bar</div> <!-- cached -->
   <div>{{ dynamic }}</div>
 </div>
 ```
 
-[Ispeziona in Template Explorer](https://template-explorer.vuejs.org/#eyJzcmMiOiI8ZGl2PlxuICA8ZGl2PmZvbzwvZGl2PiA8IS0tIGhvaXN0ZWQgLS0+XG4gIDxkaXY+YmFyPC9kaXY+IDwhLS0gaG9pc3RlZCAtLT5cbiAgPGRpdj57eyBkeW5hbWljIH19PC9kaXY+XG48L2Rpdj5cbiIsIm9wdGlvbnMiOnsiaG9pc3RTdGF0aWMiOnRydWV9fQ==)
+[Ispeziona in Template Explorer](https://template-explorer.vuejs.org/#eyJzcmMiOiI8ZGl2PlxuICA8ZGl2PmZvbzwvZGl2PiA8IS0tIGNhY2hlZCAtLT5cbiAgPGRpdj5iYXI8L2Rpdj4gPCEtLSBjYWNoZWQgLS0+XG4gIDxkaXY+e3sgZHluYW1pYyB9fTwvZGl2PlxuPC9kaXY+XG4iLCJvcHRpb25zIjp7ImhvaXN0U3RhdGljIjp0cnVlfX0=)
 
-I div `foo` e `bar` sono statici: ricreare i vnode e confrontarli a ogni rendering non è necessario. Il compilatore di Vue sposta automaticamente le chiamate alla creazione dei vnode dalla funzione di rendering e riutilizza gli stessi vnode a ogni rendering. Il renderer è anche in grado di evitare completamente la loro comparazione quando si accorge che il vecchio vnode e il nuovo vnode sono gli stessi.
+I div `foo` e `bar` sono statici: ricreare i vnode e confrontarli a ogni nuovo rendering non è necessario. Il renderer crea questi vnode durante il rendering iniziale, li memorizza nella cache e riutilizza gli stessi vnode per ogni nuovo rendering successivo. Il renderer è anche in grado di saltare completamente la comparazione quando rileva che il vecchio vnode e il nuovo vnode sono identici.
 
-Inoltre, quando ci sono abbastanza elementi statici consecutivi, essi saranno condensati in un singolo "vnode statico" che contiene la stringa HTML semplice per tutti questi nodi ([Esempio](https://template-explorer.vuejs.org/#eyJzcmMiOiI8ZGl2PlxuICA8ZGl2IGNsYXNzPVwiZm9vXCI+Zm9vPC9kaXY+XG4gIDxkaXYgY2xhc3M9XCJmb29cIj5mb288L2Rpdj5cbiAgPGRpdiBjbGFzcz1cImZvb1wiPmZvbzwvZGl2PlxuICA8ZGl2IGNsYXNzPVwiZm9vXCI+Zm9vPC9kaXY+XG4gIDxkaXYgY2xhc3M9XCJmb29cIj5mb288L2Rpdj5cbiAgPGRpdj57eyBkeW5hbWljIH19PC9kaXY+XG48L2Rpdj4iLCJzc3IiOmZhbHNlLCJvcHRpb25zIjp7ImhvaXN0U3RhdGljIjp0cnVlfX0=)). Questi vnode statici vengono montati impostando direttamente `innerHTML`. Inoltre, al momento del montaggio iniziale, vengono memorizzati nella cache i nodi DOM corrispondenti: se lo stesso contenuto viene riutilizzato in altre parti dell'applicazione, i nuovi nodi DOM vengono creati usando il metodo nativo `cloneNode()`, che è estremamente efficiente.
+Inoltre, quando ci sono abbastanza elementi statici consecutivi, essi saranno condensati in un singolo "vnode statico" che contiene la stringa HTML semplice per tutti questi nodi  ([Esempio](https://template-explorer.vuejs.org/#eyJzcmMiOiI8ZGl2PlxuICA8ZGl2IGNsYXNzPVwiZm9vXCI+Zm9vPC9kaXY+XG4gIDxkaXYgY2xhc3M9XCJmb29cIj5mb288L2Rpdj5cbiAgPGRpdiBjbGFzcz1cImZvb1wiPmZvbzwvZGl2PlxuICA8ZGl2IGNsYXNzPVwiZm9vXCI+Zm9vPC9kaXY+XG4gIDxkaXYgY2xhc3M9XCJmb29cIj5mb288L2Rpdj5cbiAgPGRpdj57eyBkeW5hbWljIH19PC9kaXY+XG48L2Rpdj4iLCJzc3IiOmZhbHNlLCJvcHRpb25zIjp7ImhvaXN0U3RhdGljIjp0cnVlfX0=)). Questi vnode statici vengono montati impostando direttamente `innerHTML`.
 
 ### Patch Flags {#patch-flags}
 
@@ -176,7 +176,7 @@ Le direttive `v-if` e `v-for` creeranno un nuovo block node:
   <div>
     <div v-if> <!-- blocco if -->
       ...
-    <div>
+    </div>
   </div>
 </div>
 ```

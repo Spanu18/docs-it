@@ -1,6 +1,29 @@
 <script setup>
-import TestingApiSwitcher from './TestingApiSwitcher.vue'
+import { VTCodeGroup, VTCodeGroupTab } from '@vue/theme'
 </script>
+<style>
+.lambdatest {
+  background-color: var(--vt-c-bg-soft);
+  border-radius: 8px;
+  padding: 12px 16px 12px 12px;
+  font-size: 13px;
+  a {
+    display: flex;
+    color: var(--vt-c-text-2);
+  }
+  img {
+    background-color: #fff;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-right: 24px;
+  }
+  .testing-partner {
+    color: var(--vt-c-text-1);
+    font-size: 15px;
+    font-weight: 600;
+  }
+}
+</style>
 
 # Testing {#testing}
 
@@ -38,9 +61,8 @@ In generale, i test di unità individueranno problemi con la logica di business 
 
 Prendi ad esempio questa funzione `increment`:
 
-```js
-// helpers.js
-export function increment (current, max = 10) {
+```js [helpers.js]
+export function increment(current, max = 10) {
   if (current < max) {
     return current + 1
   }
@@ -52,8 +74,7 @@ Poiché è molto autonoma, sarà facile invocare la funzione increment e verific
 
 Se una qualsiasi di queste asserzioni fallisce, è chiaro che il problema è contenuto nella funzione `increment`.
 
-```js{4-16}
-// helpers.spec.js
+```js{3-15} [helpers.spec.js]
 import { increment } from './helpers'
 
 describe('increment', () => {
@@ -101,7 +122,7 @@ Un componente può essere testato in due modi:
 
 - [Vitest](https://vitest.dev/)
 
-  Poiché la configurazione ufficiale creata da `create-vue` si basa su [Vite](https://vitejs.dev/), consigliamo di utilizzare un framework per i test di unità che possa sfruttare la stessa configurazione e la stessa pipeline di trasformazione direttamente da Vite. [Vitest](https://vitest.dev/) è un framework per i test di unità progettato appositamente per questo scopo, creato e mantenuto da membri del team Vue / Vite. Si integra facilmente con i progetti basati su Vite ed è estremamente veloce.
+  Poiché la configurazione ufficiale creata da `create-vue` si basa su [Vite](https://vite.dev/), consigliamo di utilizzare un framework per i test di unità che possa sfruttare la stessa configurazione e la stessa pipeline di trasformazione direttamente da Vite. [Vitest](https://vitest.dev/) è un framework per i test di unità progettato appositamente per questo scopo, creato e mantenuto da membri del team Vue / Vite. Si integra facilmente con i progetti basati su Vite ed è estremamente veloce.
 
 ### Altre opzioni {#other-options}
 
@@ -128,34 +149,9 @@ I test dei componenti dovrebbero concentrarsi sulle interfacce pubbliche del com
 
   Non sappiamo nulla dell'implementazione di Stepper, sappiamo solo che l'"input" è la prop `max` e l'"output" è lo stato del DOM come lo vedrà l'utente.
 
-<TestingApiSwitcher>
+::: code-group
 
-<div class="testing-library-api">
-
-```js
-const { getByText } = render(Stepper, {
-  props: {
-    max: 1
-  }
-})
-
-getByText('0')  // Verifica implicita che "0" sia presente nel componente
-
-const button = getByText('increment')
-
-// Simula un evento di clic sul nostro pulsante di incremento.
-await fireEvent.click(button)
-
-getByText('1')
-
-await fireEvent.click(button)
-```
-
-</div>
-
-<div class="vtu-api">
-
-```js
+```js [Vue Test Utils]
 const valueSelector = '[data-testid=stepper-value]'
 const buttonSelector = '[data-testid=increment]'
 
@@ -172,11 +168,7 @@ await wrapper.find(buttonSelector).trigger('click')
 expect(wrapper.find(valueSelector).text()).toContain('1')
 ```
 
-</div>
-
-<div class="cypress-api">
-
-```js
+```js [Cypress]
 const valueSelector = '[data-testid=stepper-value]'
 const buttonSelector = '[data-testid=increment]'
 
@@ -186,18 +178,39 @@ mount(Stepper, {
   }
 })
 
-cy.get(valueSelector).should('be.visible').and('contain.text', '0')
-  .get(buttonSelector).click()
-  .get(valueSelector).should('contain.text', '1')
+cy.get(valueSelector)
+  .should('be.visible')
+  .and('contain.text', '0')
+  .get(buttonSelector)
+  .click()
+  .get(valueSelector)
+  .should('contain.text', '1')
 ```
 
-</div>
+```js [Testing Library]
+const { getByText } = render(Stepper, {
+  props: {
+    max: 1
+  }
+})
 
-</TestingApiSwitcher>
+getByText('0') // Implicit assertion that "0" is within the component
 
-- **NON FARE**
+const button = getByRole('button', { name: /increment/i })
 
-  Non fare asserzioni sullo stato privato di un'istanza di componente o sui metodi privati di un componente. Testare dettagli di implementazione rende i test fragili, in quanto sono più inclini a rompersi e richiedono aggiornamenti quando cambia l'implementazione.
+// Dispatch a click event to our increment button.
+await fireEvent.click(button)
+
+getByText('1')
+
+await fireEvent.click(button)
+```
+
+:::
+
+**DON'T**
+
+- Non fare asserzioni sullo stato privato di un'istanza di componente o sui metodi privati di un componente. Testare dettagli di implementazione rende i test fragili, in quanto sono più inclini a rompersi e richiedono aggiornamenti quando cambia l'implementazione.
 
   Il compito principale di un componente è rappresentare correttamente l'output DOM, quindi i test che si concentrano sull'output DOM offrono lo stesso livello di garanzia di correttezza (se non di più), pur essendo più robusti e resilienti ai cambiamenti.
 
@@ -241,7 +254,7 @@ I test end-to-end non importano alcun codice dell'applicazione Vue, ma si affida
 
 I test end-to-end convalidano molte delle componenti dell'applicazione. Possono essere indirizzati all'applicazione costruita localmente o persino a un ambiente di staging live. I test contro l'ambiente di staging includono non solo il codice frontend e il server statico, ma tutti i servizi di backend e l'infrastruttura associata.
 
-> Più i tuoi test assomigliano al modo in cui il tuo software viene utilizzato, maggiore fiducia possono darti. - [Kent C. Dodds](https://twitter.com/kentcdodds/status/977018512689455106) - Autore della Testing Library
+> Più i tuoi test assomigliano al modo in cui il tuo software viene utilizzato, maggiore fiducia possono darti. - [Kent C. Dodds](https://x.com/kentcdodds/status/977018512689455106) - Autore della Testing Library
 
 Testando come le azioni degli utenti influenzano la tua applicazione, i test E2E sono spesso la chiave per una maggiore fiducia nel corretto funzionamento di un'applicazione.
 
@@ -267,15 +280,23 @@ Quando i test end-to-end (E2E) vengono eseguiti nelle pipeline di integrazione /
 
 ### Raccomandazione {#recommendation-2}
 
-- [Cypress](https://www.cypress.io/)
+- [Playwright](https://playwright.dev/) is a great E2E testing solution that supports Chromium, WebKit, and Firefox. Test on Windows, Linux, and macOS, locally or on CI, headless or headed with native mobile emulation of Google Chrome for Android and Mobile Safari. It has an informative UI, excellent debuggability, built-in assertions, parallelization, traces and is designed to eliminate flaky tests. Support for [Component Testing](https://playwright.dev/docs/test-components) is available, but marked experimental. Playwright is open source and maintained by Microsoft.
 
-  Nel complesso, riteniamo che Cypress fornisca la soluzione E2E più completa, con funzionalità come un'interfaccia grafica informativa, eccellente capacità di debug, asserzioni integrate e stub, resistenza agli errori, parallelizzazione e snapshot. Come menzionato in precedenza, offre anche il supporto per il [testing dei componenti](https://docs.cypress.io/guides/component-testing/introduction). Tuttavia, supporta solo browser basati su Chromium e Firefox.
+- [Cypress](https://www.cypress.io/) has an informative graphical interface, excellent debuggability, built-in assertions, stubs, flake-resistance, and snapshots. As mentioned above, it provides stable support for [Component Testing](https://docs.cypress.io/guides/component-testing/introduction). Cypress supports Chromium-based browsers, Firefox, and Electron. WebKit support is available, but marked experimental. Cypress is MIT-licensed, but some features like parallelization require a subscription to Cypress Cloud.
+
+<div class="lambdatest">
+  <a href="https://lambdatest.com" target="_blank">
+    <img src="/images/lambdatest.svg">
+    <div>
+      <div class="testing-partner">Testing Sponsor</div>
+      <div>Lambdatest is a cloud platform for running E2E, accessibility, and visual regression tests across all major browsers and real devices, with AI assisted test generation!</div>
+    </div>
+  </a>
+</div>
 
 ### Altre opzioni {#other-options-2}
 
-- [Playwright](https://playwright.dev/) è anche una ottima soluzione di test E2E con un'ampia gamma di supporto per i browser (principalmente WebKit). Guarda [Why Playwright](https://playwright.dev/docs/why-playwright) per ulteriori dettagli.
-
-- [Nightwatch](https://nightwatchjs.org/) è una soluzione di test E2E basata su [Selenium WebDriver](https://www.npmjs.com/package/selenium-webdriver). Questo gli conferisce la più ampia gamma di supporto per i browser.
+- [Nightwatch](https://nightwatchjs.org/) is an E2E testing solution based on [Selenium WebDriver](https://www.npmjs.com/package/selenium-webdriver). This gives it the widest browser support range, including native mobile testing. Selenium-based solutions will be slower than Playwright or Cypress.
 
 - [WebdriverIO](https://webdriver.io/) è un framework di automazione dei test per il web e il testing mobile basato sul protocollo WebDriver.
 
@@ -291,8 +312,7 @@ In un progetto Vue basato su Vite, eseguire:
 
 Successivamente, aggiornare la configurazione di Vite per aggiungere il blocco di opzioni `test`:
 
-```js{6-12}
-// vite.config.js
+```js{5-11} [vite.config.js]
 import { defineConfig } from 'vite'
 
 export default defineConfig({
@@ -308,11 +328,9 @@ export default defineConfig({
 ```
 
 :::tip
-Se si sta utilizzando TypeScript, aggiungere `vitest/globals` al campo `types` nel file `tsconfig.json`.
+Se utilizzi TypeScript, aggiungere `vitest/globals` al campo `types` nel file `tsconfig.json`.
 
-```json
-// tsconfig.json
-
+```json [tsconfig.json]
 {
   "compilerOptions": {
     "types": ["vitest/globals"]
@@ -322,10 +340,9 @@ Se si sta utilizzando TypeScript, aggiungere `vitest/globals` al campo `types` n
 
 :::
 
-Poi creare un file con estensione `*.test.js` nel tuo progetto. Puoi posizionare tutti i file di test in una directory di test nella radice del progetto, o in directory di test accanto ai tuoi file sorgente. Vitest li cercherà automaticamente utilizzando la convenzione di denominazione.
+Poi, crea un file con estensione `*.test.js` nel tuo progetto. Puoi posizionare tutti i file di test in una directory di test nella radice del progetto, o in directory di test accanto ai tuoi file sorgente. Vitest li cercherà automaticamente utilizzando la convenzione di denominazione.
 
-```js
-// MyComponent.test.js
+```js [MyComponent.test.js]
 import { render } from '@testing-library/vue'
 import MyComponent from './MyComponent.vue'
 
@@ -343,7 +360,7 @@ test('it should work', () => {
 
 Infine, aggiornare il file `package.json` per aggiungere lo script di test e eseguirlo:
 
-```json{4}
+```json{4} [package.json]
 {
   // ...
   "scripts": {
@@ -367,10 +384,9 @@ Un composable dipende da un'istanza di componente host quando utilizza le seguen
 - Lifecycle hooks
 - Provide / Inject
 
-Se un composable utilizza solo le API di reattività, allora può essere testato invocandolo direttamente e verificando il suo stato / metodi restituiti:
+Se un composable utilizza solo le API di reattività, allora può essere testato invocandolo direttamente e verificando il suo stato/metodi restituiti:
 
-```js
-// counter.js
+```js [counter.js]
 import { ref } from 'vue'
 
 export function useCounter() {
@@ -384,8 +400,7 @@ export function useCounter() {
 }
 ```
 
-```js
-// counter.test.js
+```js [counter.test.js]
 import { useCounter } from './counter.js'
 
 test('useCounter', () => {
@@ -399,8 +414,7 @@ test('useCounter', () => {
 
 Un composable che si basa su hook del ciclo di vita o su Provide / Inject deve essere incapsulato in un'istanza di componente host per essere testato. Possiamo creare un helper come il seguente:
 
-```js
-// test-utils.js
+```js [test-utils.js]
 import { createApp } from 'vue'
 
 export function withSetup(composable) {
@@ -414,12 +428,12 @@ export function withSetup(composable) {
   })
   app.mount(document.createElement('div'))
   // restituisci il risultato e l'istanza dell'app
-  // per testare provide / unmount
+  // per testare provide/unmount
   return [result, app]
 }
 ```
 
-```js
+```js [foo.test.js]
 import { withSetup } from './test-utils'
 import { useFoo } from './foo'
 

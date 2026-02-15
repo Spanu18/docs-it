@@ -95,7 +95,13 @@ data() {
 <div :class="classObject"></div>
 ```
 
-Questo sarà renderizzato allo stesso modo. Possiamo anche associare a una [computed property](./computed) che restituisce un oggetto. Questo è un pattern molto comune e potente:
+Questo renderizzerà:
+
+```vue-html
+<div class="active"></div>
+```
+
+Possiamo anche associare a una [computed property](./computed) che restituisce un oggetto. Questo è un pattern molto comune e potente:
 
 <div class="composition-api">
 
@@ -183,7 +189,7 @@ In questo modo si applicherà sempre `errorClass`, e `activeClass` verrà applic
 Se hai più classi condizionali, però, questo rischia di diventare un po' verboso. Ecco perché è possibile utilizzare anche la sintassi degli oggetti all'interno della sintassi dell'array:
 
 ```vue-html
-<div :class="[{ active: isActive }, errorClass]"></div>
+<div :class="[{ [activeClass]: isActive }, errorClass]"></div>
 ```
 
 ### Con i Componenti {#with-components}
@@ -290,7 +296,7 @@ Spesso è una buona idea associare direttamente un oggetto per gli stili in modo
 ```js
 const styleObject = reactive({
   color: 'red',
-  fontSize: '13px'
+  fontSize: '30px'
 })
 ```
 
@@ -316,6 +322,20 @@ data() {
 ```
 
 Di nuovo, l'associazione dello stile dell'oggetto spesso è utilizzata in combinazione con le computed properties che restituiscono oggetti.
+
+`:style` directives can also coexist with regular style attributes, just like `:class`.
+
+Template:
+
+```vue-html
+<h1 style="color: red" :style="'font-size: 1em'">hello</h1>
+```
+
+It will render:
+
+```vue-html
+<h1 style="color: red; font-size: 1em;">hello</h1>
+```
 
 ### Binding di Array {#binding-to-arrays-1}
 

@@ -21,7 +21,7 @@ import ListStagger from './transition-demos/ListStagger.vue'
 - Le classi di transizione CSS verranno applicate ai singoli elementi nell'elenco, **non** al loro gruppo / contenitore.
 
 :::tip
-Quando utilizzato nei [template DOM](/guide/essentials/component-basics#dom-template-parsing-caveats), dovrebbe essere referenziato come `<transition-group>`.
+Quando utilizzato nei [template in-DOM](/guide/essentials/component-basics#dom-template-parsing-caveats), dovrebbe essere referenziato come `<transition-group>`.
 :::
 
 ## Transizioni di Ingresso / Uscita {#enter-leave-transitions}
@@ -80,6 +80,10 @@ Ora sembra molto meglio, con un'animazione fluida anche quando l'intera lista vi
 
 [Esempio Completo](/examples/#list-transition)
 
+### Custom TransitionGroup classes {#custom-transitiongroup-classes}
+
+You can also specify custom transition classes for the moving element by passing the `moveClass` prop to `<TransitionGroup>`, just like [custom transition classes on `<Transition>`](/guide/built-ins/transition.html#custom-transition-classes).
+
 ## Transizioni Sfalsate degli Elementi in un Elenco {#staggering-list-transitions}
 
 Comunicando con le transizioni JavaScript tramite i data attribute, è possibile anche sfalsare le transizioni in un elenco. Per prima cosa, visualizziamo l'indice di un elemento in un data attribute sull'elemento DOM:
@@ -102,7 +106,7 @@ Comunicando con le transizioni JavaScript tramite i data attribute, è possibile
 </TransitionGroup>
 ```
 
-Poi, negli hook JavaScript, animiamo l'elemento con un ritardo basato sull'attributo dei dati. Questo esempio utilizza la [libreria GreenSock](https://greensock.com/) per eseguire l'animazione:
+Poi, negli hook JavaScript, animiamo l'elemento con un ritardo basato sull'attributo dei dati. Questo esempio utilizza la [libreria GSAP](https://gsap.com/) per eseguire l'animazione:
 
 ```js{5}
 function onEnter(el, done) {

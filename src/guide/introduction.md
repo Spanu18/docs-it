@@ -6,9 +6,8 @@ footer: false
 
 :::info Stai leggendo la documentazione per Vue 3!
 
-- Il supporto a Vue 2 terminerà il 31 Dicembre 2023. Per saperne di più vai su [Vue 2 Extended LTS](https://v2.vuejs.org/lts/).
-- La documentazione di Vue 2 è stata spostata su [v2.vuejs.org](https://v2.vuejs.org/).
-- Stai aggiornando da Vue 2? Dai un'occhiata alla [Guida alla Migrazione ](https://v3-migration.vuejs.org/).
+- Il supporto a Vue 2 è terminato il **31 Dicembre 2023**. Scopri di più su [Vue 2 EOL](https://v2.vuejs.org/eol/).
+- Stai aggiornando da Vue 2? Consulta la [Guida alla migrazione](https://v3-migration.vuejs.org/).
   :::
 
 <style src="@theme/styles/vue-mastery.css"></style>
@@ -26,7 +25,7 @@ footer: false
 
 ## Cos'è Vue? {#what-is-vue}
 
-Vue (pronunciato /vjuː/, come **view** in inglese) è un framework JavaScript per la costruzione di interfacce utente. Si basa su standard HTML, CSS e JavaScript e fornisce un modello di programmazione dichiarativo e basato su componenti che ti aiuta a sviluppare in modo efficiente interfacce utente, siano esse semplici o complesse.
+Vue (pronunciato /vjuː/, come **view** in inglese) è un framework JavaScript per la costruzione di interfacce utente. Si basa su standard HTML, CSS e JavaScript e fornisce un modello di programmazione dichiarativo e basato su componenti che ti aiuta a sviluppare in modo efficiente interfacce utente di qualsiasi complessità.
 
 Questo è un piccolo esempio:
 
@@ -91,7 +90,7 @@ L'esempio precedente dimostra le due caratteristiche fondamentali di Vue:
 Potresti già avere delle domande, non preoccuparti. Copriremo ogni piccolo dettaglio nel resto della documentazione. Per ora, ti preghiamo di continuare a leggere per avere una comprensione di alto livello di ciò che Vue offre.
 
 :::tip Prerequisiti
-Il resto della documentazione presume una conoscenza di base di HTML, CSS e JavaScript. Se sei completamente nuovo allo sviluppo frontend, potrebbe non essere la migliore idea tuffarti direttamente nell'uso di un framework Javascript - impara le basi e poi riprendi! Puoi verificare il tuo livello di conoscenza con questa [panoramica di JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript). L'esperienza precedente con altri framework aiuta, ma non è necessaria.
+Il resto della documentazione presume una conoscenza di base di HTML, CSS e JavaScript. Se sei completamente nuovo allo sviluppo frontend, potrebbe non essere la migliore idea tuffarti direttamente nell'uso di un framework Javascript - impara le basi e poi riprendi! Puoi verificare il tuo livello di conoscenza con questa [panoramica di JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript), [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML) e [CSS](https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps) se necessaria. L'esperienza precedente con altri framework aiuta, ma non è necessaria.
 :::
 
 ## Il Framework Progressivo {#the-progressive-framework}

@@ -90,11 +90,11 @@ Smonta un'istanza di un'applicazione montata, attivando gli hook del ciclo di vi
   }
   ```
 
-## app.component() {#app-component}
+## app.onUnmount() <sup class="vt-badge" data-text="3.5+" /> {#app-onunmount}
 
-Registra un componente globale se viene fornito sia un nome sotto forma di stringa che una definizione di componente, o ne recupera uno già registrato se viene passato solo il nome.
+Registers a callback to be called when the app is unmounted.
 
-- **Tipo**
+- **Type**
 
   ```ts
   interface App {
@@ -111,12 +111,12 @@ Registra un componente globale se viene fornito sia un nome sotto forma di strin
   const app = createApp({})
 
   // registra un oggetto con le option
-  app.component('my-component', {
+  app.component('MyComponent', {
     /* ... */
   })
 
   // recupera un componente registrato
-  const MyComponent = app.component('my-component')
+  const MyComponent = app.component('MyComponent')
   ```
 
 - **Guarda anche** [Registrare un componente](/guide/components/registration)
@@ -144,17 +144,17 @@ Registra una direttiva personalizzata globale se viene fornito sia un nome sotto
   })
 
   // registra la direttiva tramite un oggetto
-  app.directive('my-directive', {
+  app.directive('myDirective', {
     /* hook della direttiva personalizzata */
   })
 
   // registra la direttiva tramite una arrow function
-  app.directive('my-directive', () => {
+  app.directive('myDirective', () => {
     /* ... */
   })
 
   // recupera una direttiva registrata
-  const myDirective = app.directive('my-directive')
+  const myDirective = app.directive('myDirective')
   ```
 
 - **Guarda anche** [Le Direttive Personalizzate](/guide/reusability/custom-directives)
@@ -271,7 +271,9 @@ Fornisce un valore che può essere iniettato in tutti i componenti discendenti a
   - [Provide a livello app](/guide/components/provide-inject#app-level-provide)
   - [app.runWithContext()](#app-runwithcontext)
 
-## app.runWithContext()<sup class="vt-badge" data-text="3.3+" /> {#app-runwithcontext}
+## app.runWithContext() {#app-runwithcontext}
+
+- Only supported in 3.3+
 
 Esegue una callback con l'attuale app come context di injection.
 
@@ -285,7 +287,7 @@ Esegue una callback con l'attuale app come context di injection.
 
 - **Dettagli**
 
-  Si aspetta una funzione di callback e la esegue immediatamente. Durante la chiamata sincrona della callback, le chiamate a `inject()` sono in grado di cercare injection dai valori forniti dall'app attuale, anche quando non c'è un'istanza di componente attiva. Verrà restituito anche il valore proveniente dalla callback.
+  Si aspetta una funzione di callback e la esegue immediatamente. Durante la chiamata sincrona della callback,le chiamate a `inject()` sono in grado di cercare injection dai valori forniti dall'app attuale, anche quando non c'è un'istanza di componente attiva. Verrà restituito anche il valore proveniente dalla callback.
 
 - **Esempio**
 
@@ -374,6 +376,10 @@ Assegna un handler globale per gli errori non intercettati che si propagano dall
   - Hook delle direttive personalizzate
   - Hook delle transizioni
 
+  :::tip
+  In production, the 3rd argument (`info`) will be a shortened code instead of the full information string. You can find the code to string mapping in the [Production Error Code Reference](/error-reference/#runtime-errors).
+  :::
+
 - **Esempio**
 
   ```js
@@ -381,6 +387,11 @@ Assegna un handler globale per gli errori non intercettati che si propagano dall
     // gestisci l'errore, ad es. segnalalo a un servizio
   }
   ```
+
+- **Default**
+
+  The default error handler will re-throw errors during development and log errors during production.
+  You can configure this using the [throwUnhandledErrorInProduction](#app-config-throwunhandlederrorinproduction) property.
 
 ## app.config.warnHandler {#app-config-warnhandler}
 
@@ -606,3 +617,41 @@ Un oggetto per definire strategie di merging delle opzioni dei componenti person
   ```
 
 - **Guarda anche** [Istanza del Componente - `$options`](/api/component-instance#options)
+
+## app.config.idPrefix <sup class="vt-badge" data-text="3.5+" /> {#app-config-idprefix}
+
+Configure a prefix for all IDs generated via [useId()](/api/composition-api-helpers.html#useid) inside this application.
+
+- **Type:** `string`
+
+- **Default:** `undefined`
+
+- **Example**
+
+  ```js
+  app.config.idPrefix = 'myApp'
+  ```
+
+  ```js
+  // in a component:
+  const id1 = useId() // 'myApp:0'
+  const id2 = useId() // 'myApp:1'
+  ```
+
+## app.config.throwUnhandledErrorInProduction <sup class="vt-badge" data-text="3.5+" /> {#app-config-throwunhandlederrorinproduction}
+
+Force unhandled errors to be thrown in production mode.
+
+- **Type:** `boolean`
+
+- **Default:** `false`
+
+- **Details**
+
+  By default, errors thrown inside a Vue application but not explicitly handled have different behavior between development and production modes:
+
+  - In development, the error is thrown and can possibly crash the application. This is to make the error more prominent so that it can be noticed and fixed during development.
+
+  - In production, the error will only be logged to the console to minimize the impact to end users. However, this may prevent errors that only happen in production from being caught by error monitoring services.
+
+  By setting `app.config.throwUnhandledErrorInProduction` to `true`, unhandled errors will be thrown even in production mode.

@@ -300,7 +300,7 @@ Possiamo anche aggiungere un ritardo di transizione all'elemento annidato durant
 
 Tuttavia, ciò crea un piccolo problema. Di default, il componente `<Transition>` cerca di capire automaticamente quando la transizione è finita, ascoltando il **primo** evento `transitionend` o `animationend` sull'elemento di transizione radice. Con una transizione annidata, il comportamento desiderato dovrebbe essere quello di aspettare fino a quando le transizioni di tutti gli elementi interni sono terminate.
 
-In questi casi puoi specificare una durata di transizione esplicita (in millisecondi) utilizzando la prop `duration` sul componente `<transition>`. La durata totale dovrebbe corrispondere al ritardo più la durata della transizione dell'elemento interno:
+In questi casi puoi specificare una durata di transizione esplicita (in millisecondi) utilizzando la prop `duration` sul componente `<Transition>`. La durata totale dovrebbe corrispondere al ritardo più la durata della transizione dell'elemento interno:
 
 ```vue-html
 <Transition :duration="550">...</Transition>
@@ -308,7 +308,7 @@ In questi casi puoi specificare una durata di transizione esplicita (in millisec
 
 <NestedTransitions />
 
-[Prova nel Playground](https://play.vuejs.org/#eNqVVMtu2zAQ/JWtekjiRo80cIGoStCil3yADy2gC02tJCIUKZCUncDwv3cpyrbstmgLGxC53J2ZnaW0i772fbIZMMqjwnIjegcW3dA/lUp0vTYOdmCwhj3URndwRalXpSoV18pSaqu38OgTrp0Z8KZURRpQqJ42DrteMoe0AyjWg3NawRcuBX95LKOp+p1/ltHTSjeNxCINaaFkZZiywgkqqwbD/IIKl8usjECxDmmj0DqsqN4XUEklNrCJRT0RUCKXzFra6sGhOSZOqYdDodTpsHT+94xS6mNyStkHjuO6SE8KKVCks45pa92b9MtkpL6FZGSBHR26NeMvjdGDqnJ4j4ifPV7PqkqoJof7rH8dI51QcYuiaV0Od1mI7v0BoU5otAQ4g+Ocz9KCQzEq0hAz7sQGScoUlcg2OEWDMHfsKAcmJWTJvQVkFmOSQo0E5HQBFUr2BiMA6Jq0G6IAlNj55yI9UV+SAJxI4hEmJ5qPSxuwLzX7q3d7ieb0DKnWpsvD0rv/49r7dzMaqHvGhfMEB3CSvkXgTFF7Vs+kQCA4tGBhsDSMQ9RSmDtt7Flrc1en+f4i9ex0mtd/ujzSeJfPJf5NyuVE/9HsPzVCnp9wf2/995n16WK8ge6Z7iaw8XICg28tMSA8fIL10IBQ0DJVyZnR08RmFtkkvHirVligv9KOkrGiZKrXriVFa6O3Fmk62hwpHj7Als4QKMOzBZSWWVgjKqjFK1YjtLdxflWSLLsL9tAHbXyJo/1PJETL1g==)
+[Prova nel Playground](https://play.vuejs.org/#eNqVVd9v0zAQ/leO8LAfrE3HNKSFbgKmSYMHQNAHkPLiOtfEm2NHttN2mvq/c7bTNi1jgFop9t13d9995ziPyfumGc5bTLJkbLkRjQOLrm2uciXqRhsHj2BwBiuYGV3DAUEPcpUrrpUlaKUXcOkBh860eJSrcRqzUDxtHNaNZA5pBzCets5pBe+4FPz+Mk+66Bf+mSdXE12WEsdphMWQiWHKCicoLCtaw/yKIs/PR3kCitVIG4XWYUEJfATFFGIO84GYdRUIyCWzlra6dWg2wA66dgqlts7c+d8tSqk34JTQ6xqb9TjdUiTDOO21TFvrHqRfDkPpExiGKvBITjdl/L40ulVFBi8R8a3P17CiEKrM4GzULIOlFmpQoSgrl8HpKFpX3kFZu2y0BNhJxznvwaJCA1TEYcC4E3MkKp1VIptjZ43E3KajDJiUMBqeWUBmcUBUqJGYOT2GAiV7gJAA9Iy4GyoBKLH2z+N0W3q/CMC2yCCkyajM63Mbc+9z9mfvZD+b071MM23qLC69+j8PvX5HQUDdMC6cL7BOTtQXCJwpas/qHhWIBdYtWGgtDWNttWTmThu701pf1W6+v1Hd8Xbz+k+VQxmv8i7Fv1HZn+g/iv2nRkjzbd6npf/Rkz49DifQ3dLZBBYOJzC4rqgCwsUbmLYlCAUVU4XsCd1NrCeRHcYXb1IJC/RX2hEYCwJTvHYVMZoavbBI09FmU+LiFSzIh0AIXy1mqZiFKaKCmVhiEVJ7GftHZTganUZ56EYLL3FykjhL195MlMM7qxXdmEGDPOG6boRE86UJVPMki+p4H01WLz4Fm78hSdBo5xXy+yfsd3bpbXny1SA1M8c82fgcMyW66L75/hmXtN44a120ktDPOL+h1bL1HCPsA42DaPdwge3HcO/TOCb2ZumQJtA15Yl65Crg84S+BdfPtL6lezY8C3GkZ7L6Bc1zNR0=)
 
 Se necessario, puoi anche specificare valori separati per le durate di ingresso e uscita utilizzando un oggetto:
 
@@ -324,13 +324,13 @@ Potresti notare che le animazioni mostrate sopra utilizzano principalmente propr
 
 2. La maggior parte dei browser moderni può sfruttare l'accelerazione hardware della GPU quando anima `transform`.
 
-In confronto, proprietà come `height` o `margin` innescano calcoli sul layout CSS, quindi sono molto più costose da animare e dovrebbero essere utilizzate con cautela. Possiamo consultare risorse come [CSS-Triggers](https://csstriggers.com/) per vedere quali proprietà innescano questi calcoli se animate.
+In confronto, proprietà come `height` o `margin` innescano calcoli sul layout CSS, quindi sono molto più costose da animare e dovrebbero essere utilizzate con cautela.
 
 ## Hook JavaScript {#javascript-hooks}
 
 Puoi collegarti al processo di transizione con JavaScript ascoltando gli eventi sul componente `<Transition>`:
 
-```html
+```vue-html
 <Transition
   @before-enter="onBeforeEnter"
   @enter="onEnter"
@@ -407,6 +407,8 @@ export default {
 
     // chiamato quando la transizione di ingresso è terminata.
     onAfterEnter(el) {},
+
+    // called when the enter transition is cancelled before completion.
     onEnterCancelled(el) {},
 
     // called before the leave hook.
@@ -448,7 +450,7 @@ Quando si utilizzano solo transizioni JavaScript, di norma è una buona idea agg
 
 Con `:css="false"`, siamo pienamente responsabili anche del controllo di quando termina la transizione. In questo caso le callback `done` sono richieste per gli hook `@enter` e `@leave`. Altrimenti, gli hook verranno chiamati in modo sincrono e la transizione terminerà immediatamente.
 
-Ecco una demo che utilizza la [libreria GreenSock](https://greensock.com/) per eseguire le animazioni. Puoi utilizzare, ovviamente, qualsiasi altra libreria di animazione desideri, ad esempio [Anime.js](https://animejs.com/) o [Motion One](https://motion.dev/).
+Ecco una demo che utilizza la [libreria GSAP](https://gsap.com/) per eseguire le animazioni. Puoi utilizzare, ovviamente, qualsiasi altra libreria di animazione desideri, ad esempio [Anime.js](https://animejs.com/) o [Motion One](https://motion.dev/):
 
 <JsHooks />
 
@@ -467,8 +469,7 @@ Ecco una demo che utilizza la [libreria GreenSock](https://greensock.com/) per e
 
 Le transizioni possono essere riutilizzate attraverso il sistema dei componenti di Vue. Per creare una transizione riutilizzabile, possiamo creare un componente che racchiude il componente `<Transition>` e passa il contenuto dello slot:
 
-```vue{5}
-<!-- MyTransition.vue -->
+```vue{6} [MyTransition.vue]
 <script>
 // Logica degli hook JavaScript...
 </script>
@@ -580,6 +581,74 @@ Le prop di `<Transition>` come `name` possono essere anche dinamiche! Questo ci 
 Questo può essere utile quando hai definito transizioni / animazioni CSS utilizzando le convenzioni di classe di transizione di Vue e vuoi passare da una all'altra.
 
 Puoi applicare anche un comportamento diverso negli hook di transizione in JavaScript, in base allo stato attuale del tuo componente. Infine, il modo definitivo per creare transizioni dinamiche è attraverso i [componenti di transizione riutilizzabili](#reusable-transitions), che accettano prop per cambiare la natura delle transizioni da utilizzare. Potrebbe sembrare banale, ma l'unico limite è davvero la tua immaginazione.
+
+## Transitions with the Key Attribute {#transitions-with-the-key-attribute}
+
+Sometimes you need to force the re-render of a DOM element in order for a transition to occur.
+
+Take this counter component for example:
+
+<div class="composition-api">
+
+```vue
+<script setup>
+import { ref } from 'vue';
+const count = ref(0);
+
+setInterval(() => count.value++, 1000);
+</script>
+
+<template>
+  <Transition>
+    <span :key="count">{{ count }}</span>
+  </Transition>
+</template>
+```
+
+</div>
+<div class="options-api">
+
+```vue
+<script>
+export default {
+  data() {
+    return {
+      count: 1,
+      interval: null 
+    }
+  },
+  mounted() {
+    this.interval = setInterval(() => {
+      this.count++;
+    }, 1000)
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
+  }
+}
+</script>
+
+<template>
+  <Transition>
+    <span :key="count">{{ count }}</span>
+  </Transition>
+</template>
+```
+
+</div>
+
+If we had excluded the `key` attribute, only the text node would be updated and thus no transition would occur. However, with the `key` attribute in place, Vue knows to create a new `span` element whenever `count` changes and thus the `Transition` component has 2 different elements to transition between.
+
+<div class="composition-api">
+
+[Try it in the Playground](https://play.vuejs.org/#eNp9UsFu2zAM/RVCl6Zo4nhYd/GcAtvQQ3fYhq1HXTSFydTKkiDJbjLD/z5KMrKgLXoTHx/5+CiO7JNz1dAja1gbpFcuQsDYuxtuVOesjzCCxx1MsPO2gwuiXnzkhhtpTYggbW8ibBJlUV/mBJXfmYh+EHqxuITNDYzcQGFWBPZ4dUXEaQnv6jrXtOuiTJoUROycFhEpAmi3agCpRQgbzp68cA49ZyV174UJKiprckxIcMJA84hHImc9oo7jPOQ0kQ4RSvH6WXW7JiV6teszfQpDPGqEIK3DLSGpQbazsyaugvqLDVx77JIhbqp5wsxwtrRvPFI7NWDhEGtYYVrQSsgELzOiUQw4I2Vh8TRgA9YJqeIR6upDABQh9TpTAPE7WN3HlxLp084Foi3N54YN1KWEVpOMkkO2ZJHsmp3aVw/BGjqMXJE22jml0X93STRw1pReKSe0tk9fMxZ9nzwVXP5B+fgK/hAOCePsh8dAt4KcnXJR+D3S16X07a9veKD3KdnZba+J/UbyJ+Zl0IyF9rk3Wxr7jJenvcvnrcz+PtweItKuZ1Np0MScMp8zOvkvb1j/P+776jrX0UbZ9A+fYSTP)
+
+</div>
+<div class="options-api">
+
+[Try it in the Playground](https://play.vuejs.org/#eNp9U8tu2zAQ/JUFTwkSyw6aXlQ7QB85pIe2aHPUhZHWDhOKJMiVYtfwv3dJSpbbBgEMWJydndkdUXvx0bmi71CUYhlqrxzdVAa3znqCBtey0wT7ygA0kuTZeX4G8EidN+MJoLadoRKuLkdAGULfS12C6bSGDB/i3yFx2tiAzaRIjyoUYxesICDdDaczZq1uJrNETY4XFx8G5Uu4WiwW55PBA66txy8YyNvdZFNrlP4o/Jdpbq4M/5bzYxZ8IGydloR8Alg2qmcVGcKqEi9eOoe+EqnExXsvTVCkrBkQxoKTBspn3HFDmprp+32ODA4H9mLCKDD/R2E5Zz9+Ws5PpuBjoJ1GCLV12DASJdKGa2toFtRvLOHaY8vx8DrFMGdiOJvlS48sp3rMHGb1M4xRzGQdYU6REY6rxwHJGdJxwBKsk7WiHSyK9wFQhqh14gDyIVjd0f8Wa2/bUwOyWXwQLGGRWzicuChvKC4F8bpmrTbFU7CGL2zqiJm2Tmn03100DZUox5ddCam1ffmaMPJd3Cnj9SPWz6/gT2EbsUr88Bj4VmAljjWSfoP88mL59tc33PLzsdjaptPMfqP4E1MYPGOmfepMw2Of8NK0d238+JTZ3IfbLSFnPSwVB53udyX4q/38xurTuO+K6/Fqi8MffqhR/A==)
+
+</div>
 
 ---
 

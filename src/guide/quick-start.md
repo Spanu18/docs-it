@@ -2,6 +2,10 @@
 footer: false
 ---
 
+<script setup>
+import { VTCodeGroup, VTCodeGroupTab } from '@vue/theme'
+</script>
+
 # Avvio rapido {#quick-start}
 
 ## Prova Vue Online {#try-vue-online}
@@ -12,19 +16,45 @@ footer: false
 
 - Se hai già familiarità con Node.js e conosci gli strumenti di build (building tools), puoi anche provare una configurazione completa direttamente nel tuo browser su [StackBlitz](https://vite.new/vue).
 
+- To get a walkthrough of the recommended setup, watch this interactive [Scrimba](http://scrimba.com/links/vue-quickstart) tutorial that shows you how to run, edit, and deploy your first Vue app.
+
 ## Creare un'applicazione Vue {#creating-a-vue-application}
 
 :::tip Prerequisiti
 
-- Familiarità con la linea di comando / terminale
-- Avere installato [Node.js](https://nodejs.org/) versione 16.0 o superiore
+- Familiarità con il terminale
+- Avere installato [Node.js](https://nodejs.org/) versione `^20.19.0 || >=22.12.0`
   :::
 
-In questa sezione vedremo come creare una Vue [Single Page Application](/guide/extras/ways-of-using-vue#single-page-application-spa) in locale, sulla tua macchina. Il progetto creato utilizzerà una configurazione di build basata su [Vite](https://vitejs.dev) e ci permetterà di usare i [Single-File Components](/guide/scaling-up/sfc) (SFCs, componenti a Singolo File) di Vue.
+In questa sezione vedremo come creare una Vue [Single Page Application](/guide/extras/ways-of-using-vue#single-page-application-spa) in locale, sulla tua macchina. Il progetto creato utilizzerà una configurazione di build basata su [Vite](https://vite.dev/) e ci permetterà di usare i [Single-File Components](/guide/scaling-up/sfc) (SFCs, componenti a Singolo File) di Vue.
 
-Assicurati di avere installato una versione aggiornata di [Node.js](https://nodejs.org/) e che la tua cartella di lavoro corrente sia quella in cui intendi creare un progetto. Esegui il seguente comando nella tua linea di comando (senza il simbolo `>`):
+Make sure you have an up-to-date version of [Node.js](https://nodejs.org/) installed and your current working directory is the one where you intend to create a project. Run the following command in your command line (without the `$` sign):
 
-<div class="language-sh"><pre><code><span class="line"><span style="color:var(--vt-c-green);">&gt;</span> <span style="color:#A6ACCD;">npm create vue@latest</span></span></code></pre></div>
+::: code-group
+
+```sh [npm]
+$ npm create vue@latest
+```
+
+```sh [pnpm]
+$ pnpm create vue@latest
+```
+
+```sh [yarn]
+# For Yarn (v1+)
+$ yarn create vue
+
+# For Yarn Modern (v2+)
+$ yarn create vue@latest
+  
+# For Yarn ^v4.11
+$ yarn dlx create-vue@latest
+```
+
+```sh [bun]
+$ bun create vue@latest
+```
+:::
 
 Questo comando installerà ed eseguirà [create-vue](https://github.com/vuejs/create-vue), lo strumento ufficiale per la creazione di un progetto Vue (Scaffolding). Ti verranno presentate delle richieste per diverse funzionalità opzionali come il supporto a TypeScript e ai test:
 
@@ -34,31 +64,74 @@ Questo comando installerà ed eseguirà [create-vue](https://github.com/vuejs/cr
 <span style="color:var(--vt-c-green);">✔</span> <span style="color:#A6ACCD;">Add Vue Router for Single Page Application development? <span style="color:#888;">… <span style="color:#89DDFF;text-decoration:underline">No</span> / Yes</span></span>
 <span style="color:var(--vt-c-green);">✔</span> <span style="color:#A6ACCD;">Add Pinia for state management? <span style="color:#888;">… <span style="color:#89DDFF;text-decoration:underline">No</span> / Yes</span></span>
 <span style="color:var(--vt-c-green);">✔</span> <span style="color:#A6ACCD;">Add Vitest for Unit testing? <span style="color:#888;">… <span style="color:#89DDFF;text-decoration:underline">No</span> / Yes</span></span>
-<span style="color:var(--vt-c-green);">✔</span> <span style="color:#A6ACCD;">Add an End-to-End Testing Solution? <span style="color:#888;">… <span style="color:#89DDFF;text-decoration:underline">No</span> / Cypress / Playwright</span></span>
-<span style="color:var(--vt-c-green);">✔</span> <span style="color:#A6ACCD;">Add ESLint for code quality? <span style="color:#888;">… <span style="color:#89DDFF;text-decoration:underline">No</span> / Yes</span></span>
+<span style="color:var(--vt-c-green);">✔</span> <span style="color:#A6ACCD;">Add an End-to-End Testing Solution? <span style="color:#888;">… <span style="color:#89DDFF;text-decoration:underline">No</span> / Cypress / Nightwatch / Playwright</span></span>
+<span style="color:var(--vt-c-green);">✔</span> <span style="color:#A6ACCD;">Add ESLint for code quality? <span style="color:#888;">… No / <span style="color:#89DDFF;text-decoration:underline">Yes</span></span></span>
 <span style="color:var(--vt-c-green);">✔</span> <span style="color:#A6ACCD;">Add Prettier for code formatting? <span style="color:#888;">… <span style="color:#89DDFF;text-decoration:underline">No</span> / Yes</span></span>
+<span style="color:var(--vt-c-green);">✔</span> <span style="color:#A6ACCD;">Add Vue DevTools 7 extension for debugging? (experimental) <span style="color:#888;">… <span style="color:#89DDFF;text-decoration:underline">No</span> / Yes</span></span>
 <span></span>
 <span style="color:#A6ACCD;">Scaffolding project in ./<span style="color:#89DDFF;">&lt;</span><span style="color:#888;">il-nome-del-tuo-progetto</span><span style="color:#89DDFF;">&gt;</span>...</span>
 <span style="color:#A6ACCD;">Done.</span></code></pre></div>
 
 Se non sei sicuro di un'opzione, per ora scegli semplicemente `No` premendo invio. Una volta creato il progetto, segui le istruzioni per installare le dipendenze e avviare il server di sviluppo:
 
-<div class="language-sh"><pre><code><span class="line"><span style="color:var(--vt-c-green);">&gt; </span><span style="color:#A6ACCD;">cd</span><span style="color:#A6ACCD;"> </span><span style="color:#89DDFF;">&lt;</span><span style="color:#888;">il-nome-del-tuo-progetto</span><span style="color:#89DDFF;">&gt;</span></span>
-<span class="line"><span style="color:var(--vt-c-green);">&gt; </span><span style="color:#A6ACCD;">npm install</span></span>
-<span class="line"><span style="color:var(--vt-c-green);">&gt; </span><span style="color:#A6ACCD;">npm run dev</span></span>
-<span class="line"></span></code></pre></div>
+::: code-group
+
+```sh-vue [npm]
+$ cd {{'<your-project-name>'}}
+$ npm install
+$ npm run dev
+```
+
+```sh-vue [pnpm]
+$ cd {{'<your-project-name>'}}
+$ pnpm install
+$ pnpm run dev
+```
+
+```sh-vue [yarn]
+$ cd {{'<your-project-name>'}}
+$ yarn
+$ yarn dev
+```
+
+```sh-vue [bun]
+$ cd {{'<your-project-name>'}}
+$ bun install
+$ bun run dev
+```
+
+:::
+
 
 Adesso dovresti avere il tuo primo progetto Vue in esecuzione! Nota che i componenti di esempio nel progetto generato sono scritti utilizzando la [Composition API](/guide/introduction#composition-api) e `<script setup>`, al posto della [Options API](/guide/introduction#options-api). Ecco alcuni consigli aggiuntivi:
 
-- La configurazione IDE consigliata è [Visual Studio Code](https://code.visualstudio.com/) + [estensione Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar). Se utilizzi altri editor consulta la sezione [supporto IDE](/guide/scaling-up/tooling#ide-support).
+- La configurazione IDE consigliata è [Visual Studio Code](https://code.visualstudio.com/) + [Vue - Official extension](https://marketplace.visualstudio.com/items?itemName=Vue.volar). Se utilizzi altri editor consulta la sezione [supporto IDE](/guide/scaling-up/tooling#ide-support).
 - Altri dettagli sugli strumenti, compresa l'integrazione con i framework di backend, sono discussi nella [Guida agli strumenti](/guide/scaling-up/tooling).
-- Per saperne di più su Vite, lo strumento di build, consulta la [documentazione di Vite](https://vitejs.dev).
+- Per saperne di più su Vite, lo strumento di build, consulta la [documentazione di Vite](https://vite.dev).
 - Se scegli di usare TypeScript consulta la [Guida all'uso di TypeScript](typescript/overview).
 
 Quando sei pronto per rilasciare la tua app in produzione, esegui il seguente comando:
 
-<div class="language-sh"><pre><code><span class="line"><span style="color:var(--vt-c-green);">&gt; </span><span style="color:#A6ACCD;">npm run build</span></span>
-<span class="line"></span></code></pre></div>
+::: code-group
+
+```sh [npm]
+$ npm run build
+```
+
+```sh [pnpm]
+$ pnpm run build
+```
+
+```sh [yarn]
+$ yarn build
+```
+
+```sh [bun]
+$ bun run build
+```
+
+:::
+
 
 Questo creerà una versione dell'app pronta per la produzione nella cartella `./dist` del progetto. Consulta la [Guida al Rilascio in Produzione](/guide/best-practices/production-deployment) per saperne di più su come rilasciare la tua app in produzione.
 
@@ -270,14 +343,15 @@ Le Import Maps sono una funzionalità relativamente nuova del browser. Assicurat
 
 :::warning Note sull'uso in produzione
 Gli esempi visti finora usano la build di sviluppo di Vue - se intendi utilizzare Vue da una CDN in produzione, assicurati di consultare la [Guida al Rilascio in Produzione](/guide/best-practices/production-deployment#without-build-tools).
+
+While it is possible to use Vue without a build system, an alternative approach to consider is using [`vuejs/petite-vue`](https://github.com/vuejs/petite-vue) that could better suit the context where [`jquery/jquery`](https://github.com/jquery/jquery) (in the past) or [`alpinejs/alpine`](https://github.com/alpinejs/alpine) (in the present) might be used instead.
 :::
 
 ### Suddividere i moduli {#splitting-up-the-modules}
 
 Man mano che procediamo nella guida, potrebbe essere necessario dividere il nostro codice in file JavaScript separati per renderne la gestione più semplice. Ad esempio:
 
-```html
-<!-- index.html -->
+```html [index.html]
 <div id="app"></div>
 
 <script type="module">
@@ -290,8 +364,7 @@ Man mano che procediamo nella guida, potrebbe essere necessario dividere il nost
 
 <div class="options-api">
 
-```js
-// my-component.js
+```js [my-component.js]
 export default {
   data() {
     return { count: 0 }
@@ -303,8 +376,7 @@ export default {
 </div>
 <div class="composition-api">
 
-```js
-// my-component.js
+```js [my-component.js]
 import { ref } from 'vue'
 export default {
   setup() {
@@ -323,7 +395,7 @@ Per motivi di sicurezza i moduli ES possono funzionare solo sul protocollo `http
 
 Per avviare un server HTTP locale, assicurati di avere installato [Node.js](https://nodejs.org/en/), poi, nella stessa cartella dove si trova il tuo file HTML,  esegui `npx serve` dalla linea di comando. Puoi usare anche qualsiasi altro server HTTP in grado di servire i file statico con i tipi MIME corretti.
 
-Potresti aver notato che il template del componente importato è inserito come stringa JavaScript. Se stai utilizzando VSCode puoi installare l'estensione [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) e, in questo caso, usare come prefisso per la stringa il commento `/*html*/` per evidenziare la sintassi.
+Potresti aver notato che il template del componente importato è inserito come stringa JavaScript. Se stai utilizzando VS Code puoi installare l'estensione [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) e, in questo caso, usare come prefisso per la stringa il commento `/*html*/` per evidenziare la sintassi.
 
 ## Prossimi passi {#next-steps}
 

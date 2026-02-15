@@ -209,12 +209,48 @@ const emit = defineEmits<{
 
   Questa limitazione è stata risolta nella versione 3.3. La versione più recente di Vue supporta il riferimento a tipi importati e a un insieme limitato di tipi complessi nella posizione del parametro di tipo. Tuttavia, poiché la conversione da tipo a runtime è ancora basata sull'AST, alcuni tipi complessi che richiedono un'effettiva analisi del tipo, ad esempio i tipi condizionali, non sono supportati. È possibile utilizzare tipi condizionali per il tipo di una singola prop, ma non per l'intero oggetto delle props.
 
-### Valori predefiniti delle props quando si utilizza la dichiarazione di tipo  {#default-props-values-when-using-type-declaration}
+### Reactive Props Destructure <sup class="vt-badge" data-text="3.5+" /> {#reactive-props-destructure}
 
-Un inconveniente della dichiarazione `defineProps` solo per il tipo è che non fornisce un modo per fornire valori predefiniti per le props. Per risolvere questo problema, è disponibile anche una macro del compilatore `withDefaults`:
+In Vue 3.5 and above, variables destructured from the return value of `defineProps` are reactive. Vue's compiler automatically prepends `props.` when code in the same `<script setup>` block accesses variables destructured from `defineProps`:
 
 ```ts
-export interface Props {
+const { foo } = defineProps(['foo'])
+
+watchEffect(() => {
+  // runs only once before 3.5
+  // re-runs when the "foo" prop changes in 3.5+
+  console.log(foo)
+})
+```
+
+The above is compiled to the following equivalent:
+
+```js {5}
+const props = defineProps(['foo'])
+
+watchEffect(() => {
+  // `foo` transformed to `props.foo` by the compiler
+  console.log(props.foo)
+})
+```
+
+In addition, you can use JavaScript's native default value syntax to declare default values for the props. This is particularly useful when using the type-based props declaration:
+
+```ts
+interface Props {
+  msg?: string
+  labels?: string[]
+}
+
+const { msg = 'hello', labels = ['one', 'two'] } = defineProps<Props>()
+```
+
+### Valori predefiniti delle props quando si utilizza la dichiarazione di tipo <sup class="vt-badge ts" /> {#default-props-values-when-using-type-declaration}
+
+In 3.5 and above, default values can be naturally declared when using Reactive Props Destructure. But in 3.4 and below, Reactive Props Destructure is not enabled by default. In order to declare props default values with type-based declaration, the `withDefaults` compiler macro is needed:
+
+```ts
+interface Props {
   msg?: string
   labels?: string[]
 }
@@ -226,6 +262,104 @@ const props = withDefaults(defineProps<Props>(), {
 ```
 
 Questo verrà compilato a runtime nelle equivalenti opzioni `default` per le props. Inoltre, l'helper `withDefaults` fornisce controlli di tipo per i valori predefiniti e garantisce che il tipo delle `props` restituito non abbia i flag opzionali per le proprietà che hanno valori predefiniti dichiarati.
+
+:::info
+Note that default values for mutable reference types (like arrays or objects) should be wrapped in functions when using `withDefaults` to avoid accidental modification and external side effects. This ensures each component instance gets its own copy of the default value. This is **not** necessary when using default values with destructure.
+:::
+
+## defineModel() {#definemodel}
+
+- Only available in 3.4+
+
+This macro can be used to declare a two-way binding prop that can be consumed via `v-model` from the parent component. Example usage is also discussed in the [Component `v-model`](/guide/components/v-model) guide.
+
+Under the hood, this macro declares a model prop and a corresponding value update event. If the first argument is a literal string, it will be used as the prop name; Otherwise the prop name will default to `"modelValue"`. In both cases, you can also pass an additional object which can include the prop's options and the model ref's value transform options.
+
+```js
+// declares "modelValue" prop, consumed by parent via v-model
+const model = defineModel()
+// OR: declares "modelValue" prop with options
+const model = defineModel({ type: String })
+
+// emits "update:modelValue" when mutated
+model.value = 'hello'
+
+// declares "count" prop, consumed by parent via v-model:count
+const count = defineModel('count')
+// OR: declares "count" prop with options
+const count = defineModel('count', { type: Number, default: 0 })
+
+function inc() {
+  // emits "update:count" when mutated
+  count.value++
+}
+```
+
+:::warning
+If you have a `default` value for `defineModel` prop and you don't provide any value for this prop from the parent component, it can cause a de-synchronization between parent and child components. In the example below, the parent's `myRef` is undefined, but the child's `model` is 1:
+
+```vue [Child.vue]
+<script setup>
+const model = defineModel({ default: 1 })
+</script>
+```
+
+```vue [Parent.vue]
+<script setup>
+const myRef = ref()
+</script>
+
+<template>
+  <Child v-model="myRef"></Child>
+</template>
+```
+
+:::
+
+### Modifiers and Transformers {#modifiers-and-transformers}
+
+To access modifiers used with the `v-model` directive, we can destructure the return value of `defineModel()` like this:
+
+```js
+const [modelValue, modelModifiers] = defineModel()
+
+// corresponds to v-model.trim
+if (modelModifiers.trim) {
+  // ...
+}
+```
+
+When a modifier is present, we likely need to transform the value when reading or syncing it back to the parent. We can achieve this by using the `get` and `set` transformer options:
+
+```js
+const [modelValue, modelModifiers] = defineModel({
+  // get() omitted as it is not needed here
+  set(value) {
+    // if the .trim modifier is used, return trimmed value
+    if (modelModifiers.trim) {
+      return value.trim()
+    }
+    // otherwise, return the value as-is
+    return value
+  }
+})
+```
+
+### Usage with TypeScript <sup class="vt-badge ts" /> {#usage-with-typescript}
+
+Like `defineProps` and `defineEmits`, `defineModel` can also receive type arguments to specify the types of the model value and the modifiers:
+
+```ts
+const modelValue = defineModel<string>()
+//    ^? Ref<string | undefined>
+
+// default model with options, required removes possible undefined values
+const modelValue = defineModel<string>({ required: true })
+//    ^? Ref<string>
+
+const [modelValue, modifiers] = defineModel<string, 'trim' | 'uppercase'>()
+//                 ^? Record<'trim' | 'uppercase', true | undefined>
+```
 
 ## defineExpose() {#defineexpose}
 
@@ -251,6 +385,8 @@ Quando un componente genitore ottiene un'istanza di questo componente tramite ri
 
 ## defineOptions() {#defineoptions}
 
+- Only supported in 3.3+
+
 Questa macro può essere utilizzata per dichiarare le opzioni del componente direttamente all'interno di `<script setup>` senza dover utilizzare un blocco `<script>` separato:
 
 ```vue
@@ -264,10 +400,11 @@ defineOptions({
 </script>
 ```
 
-- Supportato solo in 3.3+.
 - Questa è una macro. Le opzioni saranno collocate nello scope del modulo e non possono accedere alle variabili locali in `<script setup>` che non sono costanti letterali.
 
 ## defineSlots()<sup class="vt-badge ts"/> {#defineslots}
+
+- Only supported in 3.3+
 
 Questa macro può essere utilizzata per fornire suggerimenti di tipo agli IDE per il controllo dei nomi degli slot e dei tipi delle props.
 
@@ -282,8 +419,6 @@ const slots = defineSlots<{
 }>()
 </script>
 ```
-
-- Supportato solo in 3.3+.
 
 ## `useSlots()` & `useAttrs()` {#useslots-useattrs}
 
@@ -345,8 +480,22 @@ const post = await fetch(`/api/post/1`).then((r) => r.json())
 Inoltre, l'espressione attesa verrà compilata automaticamente in un formato che conserva il contesto dell'istanza del componente corrente dopo l'`await`.
 
 :::warning Note
-`async setup()` deve essere utilizzato in combinazione con `Suspense`, che è attualmente ancora una funzionalità sperimentale. Prevediamo di finalizzarla e documentarla in una futura versione, ma se siete curiosi ora, potete fare riferimento ai suoi [tests](https://github.com/vuejs/core/blob/main/packages/runtime-core/__tests__/components/Suspense.spec.ts) per vedere come funziona.
+`async setup()` deve essere utilizzato in combinazione con [`Suspense`](/guide/built-ins/suspense.html), che è attualmente ancora una funzionalità sperimentale. Prevediamo di finalizzarla e documentarla in una futura versione, ma se siete curiosi ora, potete fare riferimento ai suoi [tests](https://github.com/vuejs/core/blob/main/packages/runtime-core/__tests__/components/Suspense.spec.ts) per vedere come funziona.
 :::
+
+## Import Statements {#imports-statements}
+
+Import statements in vue follow [ECMAScript module specification](https://nodejs.org/api/esm.html).
+In addition, you can use aliases defined in your build tool configuration:
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { componentA } from './Components'
+import { componentB } from '@/Components'
+import { componentC } from '~/Components'
+</script>
+```
 
 ## Generics <sup class="vt-badge ts" /> {#generics}
 
@@ -377,6 +526,65 @@ defineProps<{
 </script>
 ```
 
+You can use `@vue-generic` the directive to pass in explicit types, for when the type cannot be inferred:
+
+```vue
+<template>
+  <!-- @vue-generic {import('@/api').Actor} -->
+  <ApiSelect v-model="peopleIds" endpoint="/api/actors" id-prop="actorId" />
+
+  <!-- @vue-generic {import('@/api').Genre} -->
+  <ApiSelect v-model="genreIds" endpoint="/api/genres" id-prop="genreId" />
+</template>
+```
+
+In order to use a reference to a generic component in a `ref` you need to use the [`vue-component-type-helpers`](https://www.npmjs.com/package/vue-component-type-helpers) library as `InstanceType` won't work.
+
+```vue
+<script
+  setup
+  lang="ts"
+>
+import componentWithoutGenerics from '../component-without-generics.vue';
+import genericComponent from '../generic-component.vue';
+
+import type { ComponentExposed } from 'vue-component-type-helpers';
+
+// Works for a component without generics
+ref<InstanceType<typeof componentWithoutGenerics>>();
+
+ref<ComponentExposed<typeof genericComponent>>();
+```
+
+```vue
+<template>
+  <!-- @vue-generic {import('@/api').Actor} -->
+  <ApiSelect v-model="peopleIds" endpoint="/api/actors" id-prop="actorId" />
+
+  <!-- @vue-generic {import('@/api').Genre} -->
+  <ApiSelect v-model="genreIds" endpoint="/api/genres" id-prop="genreId" />
+</template>
+```
+
+In order to use a reference to a generic component in a `ref` you need to use the [`vue-component-type-helpers`](https://www.npmjs.com/package/vue-component-type-helpers) library as `InstanceType` won't work.
+
+```vue
+<script
+  setup
+  lang="ts"
+>
+import componentWithoutGenerics from '../component-without-generics.vue';
+import genericComponent from '../generic-component.vue';
+
+import type { ComponentExposed } from 'vue-component-type-helpers';
+
+// Works for a component without generics
+ref<InstanceType<typeof componentWithoutGenerics>>();
+
+ref<ComponentExposed<typeof genericComponent>>();
+```
+
 ## Restrizioni {#restrictions}
 
-A causa della differenza nelle modalità di esecuzione dei moduli, il codice all'interno di `<script setup>` si basa sul contesto di un SFC. Quando spostato in file esterni `.js` o `.ts`, può causare confusione sia per gli sviluppatori che per gli strumenti. Pertanto,  **`<script setup>`** non può essere utilizzato con l'attributo `src`.
+- A causa della differenza nelle modalità di esecuzione dei moduli, il codice all'interno di `<script setup>` si basa sul contesto di un SFC. Quando spostato in file esterni `.js` o `.ts`, può causare confusione sia per gli sviluppatori che per gli strumenti. Pertanto,  **`<script setup>`** non può essere utilizzato con l'attributo `src`.
+- `<script setup>` does not support In-DOM Root Component Template.([Related Discussion](https://github.com/vuejs/core/issues/8391))

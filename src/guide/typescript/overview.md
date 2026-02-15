@@ -10,7 +10,7 @@ Vue stesso è scritto in TypeScript e offre un supporto TypeScript di prima clas
 
 ## Creare un applicazione {#project-setup}
 
-[`create-vue`](https://github.com/vuejs/create-vue), il tool ufficiale, offre la possibilità di creare un progetto [Vite](https://vitejs.dev/) con TypeScript già incluso.
+[`create-vue`](https://github.com/vuejs/create-vue), il tool ufficiale, offre la possibilità di creare un progetto Vue [Vite](https://vite.dev/)-powered, TypeScript-ready.
 
 ### Overview {#overview}
 
@@ -18,23 +18,21 @@ Con una configurazione basata su Vite, il server di sviluppo e il bundler eseguo
 
 - Durante lo sviluppo, raccomandiamo di affidarsi a una buona [configurazione dell'IDE](#ide-support) per eventuali errori istantanei.
 
-- Se si utilizzano gli SFC, è possibile utilizzare [`vue-tsc`](https://github.com/vuejs/language-tools/tree/master/packages/vue-tsc) per il controllo dei tipi da linea di comando e per la generazione delle dichiarazioni di tipo. `vue-tsc` è un wrapper attorno a `tsc`, l'interfaccia della riga di comando di TypeScript. Funziona in gran parte allo stesso modo di `tsc` ma supporta anche i file SFC di Vue oltre ai file TypeScript. È possibile eseguire `vue-tsc` in modalità di watch in parallelo con il server di sviluppo Vite, oppure utilizzare un suo plugin come [vite-plugin-checker](https://vite-plugin-checker.netlify.app/) che esegue i controlli in un thread separato.
+- Se si utilizzano gli SFC, è possibile utilizzare [`vue-tsc`](https://github.com/vuejs/language-tools/tree/master/packages/tsc) per il controllo dei tipi da linea di comando e per la generazione delle dichiarazioni di tipo. `vue-tsc` è un wrapper attorno a `tsc`, l'interfaccia della riga di comando di TypeScript. Funziona in gran parte allo stesso modo di `tsc` ma supporta anche i file SFC di Vue oltre ai file TypeScript. È possibile eseguire `vue-tsc` in modalità di watch in parallelo con il server di sviluppo Vite, oppure utilizzare un suo plugin come [vite-plugin-checker](https://vite-plugin-checker.netlify.app/) che esegue i controlli in un thread separato.
 
 - Vue CLI offre anche il supporto per TypeScript, ma è stata deprecata. Vedere le [note di seguito](#note-on-vue-cli-and-ts-loader).
 
 ### Supporto degli IDE {#ide-support}
 
-- [Visual Studio Code](https://code.visualstudio.com/) (VSCode) è fortemente raccomandato per il suo eccellente supporto "out-of-the-box" per TypeScript.
+- [Visual Studio Code](https://code.visualstudio.com/) (VS Code) è fortemente raccomandato per il suo eccellente supporto "out-of-the-box" per TypeScript.
 
-  - [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) è l'estensione ufficiale di VSCode che fornisce il supporto TypeScript all'interno dei file SFC di Vue, insieme a molte altre fantastiche funzionalità.
+  - [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (precedentemente Volar) è l'estensione ufficiale di VS Code che fornisce il supporto TypeScript all'interno dei file SFC di Vue, insieme a molte altre fantastiche funzionalità.
 
     :::tip
-    Volar sostituisce [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur), la nostra precedente estensione ufficiale di VSCode per Vue 2. Se hai attualmente Vetur installato, assicurati di disabilitarlo nei progetti di Vue 3.
+    Vue - Official extension sostituisce [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur), la nostra precedente estensione ufficiale di VS Code per Vue 2. Se hai attualmente Vetur installato, assicurati di disabilitarlo nei progetti di Vue 3.
     :::
 
-  - [TypeScript Vue Plugin](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) è anche necessario  per ottenere il supporto dei tipi per gli import di file *.vue nei file TS.
-
-- [WebStorm](https://www.jetbrains.com/webstorm/) fornisce anche un supporto nativo sia per TypeScript che per Vue. Altri IDE JetBrains li supportano anche, sia nativamente che tramite [un plugin gratuito](https://plugins.jetbrains.com/plugin/9442-vue-js).
+- [WebStorm](https://www.jetbrains.com/webstorm/) fornisce anche un supporto nativo sia per TypeScript che per Vue. Altri IDE JetBrains li supportano anche, sia nativamente che tramite [un plugin gratuito](https://plugins.jetbrains.com/plugin/9442-vue-js). As of version 2023.2, WebStorm and the Vue Plugin come with built-in support for the Vue Language Server. You can set the Vue service to use Volar integration on all TypeScript versions, under Settings > Languages & Frameworks > TypeScript > Vue. By default, Volar will be used for TypeScript versions 5.0 and higher.
 
 ### Configurare `tsconfig.json` {#configuring-tsconfig-json}
 
@@ -42,34 +40,18 @@ I progetti creati tramite `create-vue` includono un file `tsconfig.json`. La con
 
 Quando si configura manualmente il file `tsconfig.json`, alcune opzioni importanti includono:
 
-- [`compilerOptions.isolatedModules`](https://www.typescriptlang.org/tsconfig#isolatedModules) è impostata su `true` perché Vite usa [esbuild](https://esbuild.github.io/) per la transpilazione di TypeScript ed è soggetto a limitazioni di transpilazione per file singoli.
+- [`compilerOptions.isolatedModules`](https://www.typescriptlang.org/tsconfig#isolatedModules) è impostata su `true` perché Vite usa [esbuild](https://esbuild.github.io/) per la transpilazione di TypeScript ed è soggetto a limitazioni di transpilazione per file singoli. [`compilerOptions.verbatimModuleSyntax`](https://www.typescriptlang.org/tsconfig#verbatimModuleSyntax) is [a superset of `isolatedModules`](https://github.com/microsoft/TypeScript/issues/53601) and is a good choice, too - it's what [`@vue/tsconfig`](https://github.com/vuejs/tsconfig) uses.
 
 - Se stai utilizzando l'Options API, è necessario impostare  [`compilerOptions.strict`](https://www.typescriptlang.org/tsconfig#strict) su `true` (o almeno abilitare [`compilerOptions.noImplicitThis`](https://www.typescriptlang.org/tsconfig#noImplicitThis), che fa parte del flag `strict`) per sfruttare il controllo dei tipi di `this` nelle opzioni del componente. In caso contrario, `this` verrà considerato come `any`.
 
 - Se hai configurato alias di risoluzione nel tuo strumento di compilazione, ad esempio l'alias  `@/*` configurato per impostazione predefinita in un progetto `create-vue`, devi configurarlo anche per TypeScript tramite [`compilerOptions.paths`](https://www.typescriptlang.org/tsconfig#paths).
 
+- If you intend to use TSX with Vue, set [`compilerOptions.jsx`](https://www.typescriptlang.org/tsconfig#jsx) to `"preserve"`, and set [`compilerOptions.jsxImportSource`](https://www.typescriptlang.org/tsconfig#jsxImportSource) to `"vue"`.
+
 Controlla anche:
 
 - [Opzioni del compilatore ufficiale TypeScript](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
 - [Caveats sulla compilazione di TypeScript con esbuild](https://esbuild.github.io/content-types/#typescript-caveats)
-
-### Modalità Takeover di Volar {#volar-takeover-mode}
-
-> Questa sezione è valida solo se si dispone di VSCode + Volar.
-
-Per far funzionare insieme Vue SFC (Single File Components) e TypeScript, Volar crea un'istanza separata del servizio del TS con supporto specifico per Vue e lo utilizza nei SFC di Vue. Allo stesso tempo, i file TS normali vengono ancora gestiti dal servizio del linguaggio TS integrato in VSCode, motivo per cui abbiamo bisogno del plugin [TypeScript per Vue](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) per supportare gli import delle Vue SFC (Single File Components) nei file TS (TypeScript), questa configurazione predefinita funziona, ma per ogni progetto stiamo eseguendo due istanze del servizio del linguaggio TS: una da Volar e una da VSCode. Questo è un po' inefficiente e può causare problemi di prestazioni in progetti di grandi dimensioni.
-
-Per migliorare le prestazioni, Volar offre la "Modalità Takeover". In modalità takeover, Volar fornisce supporto sia per i file Vue che per i file TS utilizzando una singola istanza del servizio del linguaggio TS.
-
-Per abilitare la Modalità Takeover, è necessario disabilitare il servizio del linguaggio TS integrato di VSCode **solo nel workspace del vostro progetto** seguendo questi passaggi:
-
-1. Nel workspace del vostro progetto, aprite la palette dei comandi con `Ctrl + Shift + P` (macOS: `Cmd + Shift + P`).
-2. Digitate `built`  e selezionate "Extensions: Show Built-in Extensions".
-3. Nella casella di ricerca delle estensioni, digitate `typescript` (senza rimuovere il prefisso `@builtin`).
-4. Cliccate sull'icona a forma di ingranaggio di "TypeScript and JavaScript Language Features" e selezionate "Disable (Workspace)".
-5. Ricaricate il workspace. La modalità takeover sarà attivata quando aprite un file Vue o TS.
-
-<img src="./images/takeover-mode.png" width="590" height="426" style="margin:0px auto;border-radius:8px">
 
 ### Note sulla Vue CLI e `ts-loader` {#note-on-vue-cli-and-ts-loader}
 
@@ -130,7 +112,7 @@ export default defineComponent({
 Guarda anche:
 
 - [Note sul webpack Treeshaking](/api/general#note-on-webpack-treeshaking)
-- [Test dei tipi per `defineComponent`](https://github.com/vuejs/core/blob/main/packages/dts-test/defineComponent.test-d.tsx)
+- [Test dei tipi per `defineComponent`](https://github.com/vuejs/core/blob/main/packages-private/dts-test/defineComponent.test-d.tsx)
 
 :::tip
 `defineComponent()` abilita anche l'inferring dei tipi per i componenti definiti in JavaScript puro.
@@ -208,7 +190,7 @@ let x: string | number = 1
 Se si utilizza Vue CLI o una configurazione basata su webpack, TypeScript nelle espressioni dei template richiede `vue-loader@^16.8.0`.
 :::
 
-### Utilizzo con TSX
+### Utilizzo con TSX {#usage-with-tsx}
 
 Vue supporta anche la creazione di componenti con JSX / TSX. I dettagli sono trattati nella guida [Render Function & JSX](/guide/extras/render-function.html#jsx-tsx).
 
