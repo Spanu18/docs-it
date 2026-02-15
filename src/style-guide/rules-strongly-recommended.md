@@ -1,5 +1,9 @@
 # Priority B Rules: Strongly Recommended {#priority-b-rules-strongly-recommended}
 
+::: warning Note
+This Vue.js Style Guide is outdated and needs to be reviewed. If you have any questions or suggestions, please [open an issue](https://github.com/vuejs/docs/issues/new).
+:::
+
 These rules have been found to improve readability and/or developer experience in most projects. Your code will still run if you violate them, but violations should be rare and well-justified.
 
 ## Component files {#component-files}
@@ -152,34 +156,6 @@ components/
 |- VButton.vue
 |- VTable.vue
 |- VIcon.vue
-```
-
-</div>
-
-## Single-instance component names {#single-instance-component-names}
-
-**Components that should only ever have a single active instance should begin with the `The` prefix, to denote that there can be only one.**
-
-This does not mean the component is only used in a single page, but it will only be used once _per page_. These components never accept any props, since they are specific to your app, not their context within your app. If you find the need to add props, it's a good indication that this is actually a reusable component that is only used once per page _for now_.
-
-<div class="style-example style-example-bad">
-<h3>Bad</h3>
-
-```
-components/
-|- Heading.vue
-|- MySidebar.vue
-```
-
-</div>
-
-<div class="style-example style-example-good">
-<h3>Good</h3>
-
-```
-components/
-|- TheHeading.vue
-|- TheSidebar.vue
 ```
 
 </div>
@@ -337,7 +313,7 @@ components/
 
 ## Self-closing components {#self-closing-components}
 
-**Components with no content should be self-closing in [Single-File Components](/guide/scaling-up/sfc), string templates, and [JSX](/guide/extras/render-function#jsx-tsx) - but never in DOM templates.**
+**Components with no content should be self-closing in [Single-File Components](/guide/scaling-up/sfc), string templates, and [JSX](/guide/extras/render-function#jsx-tsx) - but never in in-DOM templates.**
 
 Components that self-close communicate that they not only have no content, but are **meant** to have no content. It's the difference between a blank page in a book and one labeled "This page intentionally left blank." Your code is also cleaner without the unnecessary closing tag.
 
@@ -352,7 +328,7 @@ Unfortunately, HTML doesn't allow custom elements to be self-closing - only [off
 ```
 
 ```vue-html
-<!-- In DOM templates -->
+<!-- In in-DOM templates -->
 <my-component/>
 ```
 
@@ -367,7 +343,7 @@ Unfortunately, HTML doesn't allow custom elements to be self-closing - only [off
 ```
 
 ```vue-html
-<!-- In DOM templates -->
+<!-- In in-DOM templates -->
 <my-component></my-component>
 ```
 
@@ -375,7 +351,7 @@ Unfortunately, HTML doesn't allow custom elements to be self-closing - only [off
 
 ## Component name casing in templates {#component-name-casing-in-templates}
 
-**In most projects, component names should always be PascalCase in [Single-File Components](/guide/scaling-up/sfc) and string templates - but kebab-case in DOM templates.**
+**In most projects, component names should always be PascalCase in [Single-File Components](/guide/scaling-up/sfc) and string templates - but kebab-case in in-DOM templates.**
 
 PascalCase has a few advantages over kebab-case:
 
@@ -383,7 +359,7 @@ PascalCase has a few advantages over kebab-case:
 - `<MyComponent>` is more visually distinct from a single-word HTML element than `<my-component>`, because there are two character differences (the two capitals), rather than just one (a hyphen).
 - If you use any non-Vue custom elements in your templates, such as a web component, PascalCase ensures that your Vue components remain distinctly visible.
 
-Unfortunately, due to HTML's case insensitivity, DOM templates must still use kebab-case.
+Unfortunately, due to HTML's case insensitivity, in-DOM templates must still use kebab-case.
 
 Also note that if you've already invested heavily in kebab-case, consistency with HTML conventions and being able to use the same casing across all your projects may be more important than the advantages listed above. In those cases, **using kebab-case everywhere is also acceptable.**
 
@@ -401,7 +377,7 @@ Also note that if you've already invested heavily in kebab-case, consistency wit
 ```
 
 ```vue-html
-<!-- In DOM templates -->
+<!-- In in-DOM templates -->
 <MyComponent></MyComponent>
 ```
 
@@ -416,7 +392,7 @@ Also note that if you've already invested heavily in kebab-case, consistency wit
 ```
 
 ```vue-html
-<!-- In DOM templates -->
+<!-- In in-DOM templates -->
 <my-component></my-component>
 ```
 

@@ -83,8 +83,7 @@ Nell'Options API, i dati reattivi vengono dichiarati utilizzando l'opzione `data
 
 Se hai una porzione di stato che deve essere condivisa da diverse istanze, puoi utilizzare [`reactive()`](/api/reactivity-core#reactive) per creare un oggetto reattivo e quindi importarlo in più componenti:
 
-```js
-// store.js
+```js [store.js]
 import { reactive } from 'vue'
 
 export const store = reactive({
@@ -94,8 +93,7 @@ export const store = reactive({
 
 <div class="composition-api">
 
-```vue
-<!-- ComponentA.vue -->
+```vue [ComponentA.vue]
 <script setup>
 import { store } from './store.js'
 </script>
@@ -103,8 +101,7 @@ import { store } from './store.js'
 <template>From A: {{ store.count }}</template>
 ```
 
-```vue
-<!-- ComponentB.vue -->
+```vue [ComponentB.vue]
 <script setup>
 import { store } from './store.js'
 </script>
@@ -115,8 +112,7 @@ import { store } from './store.js'
 </div>
 <div class="options-api">
 
-```vue
-<!-- ComponentA.vue -->
+```vue [ComponentA.vue]
 <script>
 import { store } from './store.js'
 
@@ -132,8 +128,7 @@ export default {
 <template>From A: {{ store.count }}</template>
 ```
 
-```vue
-<!-- ComponentB.vue -->
+```vue [ComponentB.vue]
 <script>
 import { store } from './store.js'
 
@@ -165,8 +160,7 @@ Tuttavia, questo significa anche che qualsiasi componente che importa `store` pu
 
 Anche se questo funziona nei casi semplici, uno stato globale che può essere arbitrariamente modificato da qualsiasi componente non sarà molto mantenibile a lungo termine. Per garantire che la logica di modifica dello stato sia centralizzata come lo stesso stato, è consigliabile definire metodi nello store con nomi che esprimano l'intenzione delle azioni:
 
-```js{6-8}
-// store.js
+```js{5-7} [store.js]
 import { reactive } from 'vue'
 
 export const store = reactive({

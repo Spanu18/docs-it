@@ -22,24 +22,16 @@ Crea un renderer personalizzato. Fornendo API specifiche della piattaforma per l
       key: string,
       prevValue: any,
       nextValue: any,
-      // il resto è inutilizzato per la maggior parte dei renderer personalizzati
-      isSVG?: boolean,
-      prevChildren?: VNode<HostNode, HostElement>[],
+      namespace?: ElementNamespace,
       parentComponent?: ComponentInternalInstance | null,
-      parentSuspense?: SuspenseBoundary | null,
-      unmountChildren?: UnmountChildrenFn
     ): void
-    insert(
-      el: HostNode,
-      parent: HostElement,
-      anchor?: HostNode | null
-    ): void
+    insert(el: HostNode, parent: HostElement, anchor?: HostNode | null): void
     remove(el: HostNode): void
     createElement(
       type: string,
-      isSVG?: boolean,
+      namespace?: ElementNamespace,
       isCustomizedBuiltIn?: string,
-      vnodeProps?: (VNodeProps & { [key: string]: any }) | null
+      vnodeProps?: (VNodeProps & { [key: string]: any }) | null,
     ): HostElement
     createText(text: string): HostNode
     createComment(text: string): HostNode
@@ -47,8 +39,6 @@ Crea un renderer personalizzato. Fornendo API specifiche della piattaforma per l
     setElementText(node: HostElement, text: string): void
     parentNode(node: HostNode): HostElement | null
     nextSibling(node: HostNode): HostNode | null
-
-    // opzionale, DOM-specific
     querySelector?(selector: string): HostElement | null
     setScopeId?(el: HostElement, id: string): void
     cloneNode?(node: HostNode): HostNode
@@ -56,7 +46,9 @@ Crea un renderer personalizzato. Fornendo API specifiche della piattaforma per l
       content: string,
       parent: HostElement,
       anchor: HostNode | null,
-      isSVG: boolean
+      namespace: ElementNamespace,
+      start?: HostNode | null,
+      end?: HostNode | null,
     ): [HostNode, HostNode]
   }
   ```

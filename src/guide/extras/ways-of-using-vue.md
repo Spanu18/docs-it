@@ -6,7 +6,7 @@ Crediamo che non esista una soluzione "unica per tutti" per il web. Ecco perché
 
 Vue può essere utilizzato come un file di script incorporato (standalone) - non è richiesta alcuna build! Se hai un framework backend che genera già la maggior parte dell'HTML, o la tua logica frontend non è abbastanza complessa da giustificare una build, questo è il modo più semplice per integrare Vue nel tuo stack. In questi casi puoi pensare a Vue come un sostituto più dichiarativo di jQuery.
 
-Inoltre Vue dispone di una distribuzione alternativa chiamata [petite-vue](https://github.com/vuejs/petite-vue) che è specificamente ottimizzata per migliorare progressivamente l'HTML esistente. Ha un set di funzionalità più piccolo, ma è estremamente leggero e utilizza un'implementazione che è più efficiente in scenari senza step di build.
+In precedenza fornivamo una distribuzione alternativa chiamata [petite-vue](https://github.com/vuejs/petite-vue), specificamente ottimizzata per il miglioramento progressivo del codice HTML esistente. Tuttavia, petite-vue non è più mantenuta attivamente, con l'ultima versione pubblicata su Vue 3.2.27.
 
 ## Web Components Incorporati {#embedded-web-components}
 
@@ -53,7 +53,8 @@ Il team di Vue mantiene anche un generatore di siti statici chiamato [VitePress]
 
 Anche se Vue è progettato principalmente per la creazione di applicazioni web, non è in alcun modo limitato solo ai browser. Puoi:
 
-- Creare applicazioni desktop con [Electron](https://www.electronjs.org/) o [Tauri](https://tauri.studio/en/)
+- Creare applicazioni desktop con [Electron](https://www.electronjs.org/) o [Wails](https://wails.io)
 - Creare applicazioni mobile con [Ionic Vue](https://ionicframework.com/docs/vue/overview)
-- Creare applicazioni desktop e mobile dallo stesso codice sorgente con [Quasar](https://quasar.dev/)
-- Utilizzare la [Custom Renderer API](/api/custom-renderer) di Vue per creare renderer personalizzati per [WebGL](https://troisjs.github) o persino per [il terminale](https://github.com/vue-terminal/vue-termui)!
+- Creare applicazioni desktop e mobile dallo stesso codice sorgente con [Quasar](https://quasar.dev/) or [Tauri](https://tauri.app)
+- Creare esperienze WebGL 3D con [TresJS](https://tresjs.org/)
+- Utilizzare la [Custom Renderer API](/api/custom-renderer) di Vue per creare renderer personalizzati, come quelli per [il terminale](https://github.com/vue-terminal/vue-termui)!

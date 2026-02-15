@@ -2,7 +2,7 @@
 
 ## Chi gestisce Vue? {#who-maintains-vue}
 
-Vue è indipendente ed è un prodotto guidato dalla community, fondato da [Evan You](https://twitter.com/youyuxi) nel 2014 come side-project personale. Oggi, Vue è gestito attivamente da un team composto sia di [lavoratori full-time che volontari, provenienti da tutto il mondo](/about/team), e Evan è il team leader. Puoi scoprire di più sulla storia di Vue in questo [documentario](https://www.youtube.com/watch?v=OrxmtDw4pVI).
+Vue è un progetto indipendente, guidato dalla comunità. È stato creato da [Evan You](https://x.com/youyuxi) nel 2014 come progetto parallelo personale. Oggi, Vue è attivamente gestito da [un team di membri a tempo pieno e volontari provenienti da tutto il mondo](/about/team), dove Evan è il responsabile del progetto. Puoi scoprire di più sulla storia di Vue in questo [documentario](https://www.youtube.com/watch?v=OrxmtDw4pVI).
 
 Vue è principalmente finanziato attraverso sponsorizzazioni ed è stato finanziariamente sostenibile dal 2016. Se tu o la tua azienda traete vantaggio da Vue, considera una [sponsorizzazione](/sponsor/) per supportare lo sviluppo di Vue!
 
@@ -21,6 +21,8 @@ Se intendi migrare un'applicazione Vue 2 esistente a Vue 3, consulta la [guida a
 
 Vue 2.7, che è stato rilasciato a luglio 2022, è l'ultima versione minore della gamma di versioni di Vue 2. Vue 2 è ora entrato nella modalità di manutenzione: non verranno più introdotte nuove funzionalità, ma continuerà a ricevere correzioni critiche di bug e aggiornamenti di sicurezza per 18 mesi a partire dalla data di rilascio della versione 2.7. Questo significa che Vue 2 raggiungerà la fine del supporto il 31 dicembre 2023. 
 
+Vue 2.7, which was shipped in July 2022, is the final minor release of the Vue 2 version range. Vue 2 has entered maintenance mode: it will no longer ship new features, but will continue to receive critical bug fixes and security updates for 18 months starting from the 2.7 release date. This means **Vue 2 reached End of Life on December 31st, 2023**.
+
 Crediamo che ciò dovrebbe fornire abbondante tempo per la maggior parte dell'ecosistema per migrare a Vue 3. Tuttavia, comprendiamo anche che potrebbero esserci team o progetti che non possono effettuare l'aggiornamento entro questa data, ma hanno ancora bisogno di soddisfare requisiti di sicurezza e conformità. Stiamo collaborando con esperti del settore per fornire supporto esteso per Vue 2 per i team con tali esigenze - se il tuo team prevede di utilizzare Vue 2 oltre la fine del 2023, assicurati di pianificare in anticipo e scoprire di più su [Vue 2 Extended LTS](https://v2.vuejs.org/lts/).
 
 ## Che licenza usa Vue? {#what-license-does-vue-use}
@@ -29,7 +31,7 @@ Vue è un progetto open source rilasciato sotto licenza dal [MIT](https://openso
 
 ## Quali browsers supportano Vue? {#what-browsers-does-vue-support}
 
-L'ultima versione di Vue (3.x) supporta solo browser con [supporto nativo di ES2015](https://caniuse.com/es6). Questo esclude IE11. Vue 3.x utilizza funzionalità ES2015 che non possono essere polyfillate nei browser meno moderni, quindi se è necessario supportare questi browser, dovrai utilizzare Vue 2.x al suo posto.
+The latest version of Vue (3.x) only supports [browsers with native ES2016 support](https://caniuse.com/es2016). This excludes IE11. Vue 3.x uses ES2016 features that cannot be polyfilled in legacy browsers, so if you need to support legacy browsers, you will need to use Vue 2.x instead.
 
 ## Vue è affidabile? {#is-vue-reliable}
 Vue è un framework maturo e collaudato. È uno dei framework JavaScript più utilizzati in produzione oggi, con oltre 1,5 milioni di utenti in tutto il mondo, e viene scaricato quasi 10 milioni di volte al mese su npm.
@@ -40,8 +42,7 @@ Vue è utilizzato in produzione da rinomate organizzazioni in diverse capacità 
 
 Vue 3 è uno dei framework front-end mainstream più performanti e gestisce la maggior parte dei casi d'uso delle applicazioni web con facilità, senza la necessità di ottimizzazioni manuali.
 
-In scenari di stress test, Vue supera React e Angular con un margine significativo nel test [js-framework-benchmark](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html). 
-Vue 3 si posiziona allo stesso livello di alcune delle più veloci librerie front-end di produzione non basate su Virtual-DOM nel benchmark.
+In scenari di stress test, Vue supera React e Angular con un margine significativo nel test [js-framework-benchmark](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html). Vue 3 si posiziona allo stesso livello di alcune delle più veloci librerie front-end di produzione non basate su Virtual-DOM nel benchmark.
 
 Tieni presente che i benchmark sintetici come quello sopra si concentrano sulle prestazioni di rendering grezze con ottimizzazioni dedicate e potrebbero non rappresentare completamente i risultati delle prestazioni nel mondo reale. Se ti interessa di più la performance di caricamento delle pagine, puoi testare questa stessa pagina web usando [WebPageTest](https://www.webpagetest.org/lighthouse) o [PageSpeed Insights](https://pagespeed.web.dev/). This website è fatto in Vue stesso, con pre-rendering SSG e navigazione client-side SPA. Ottiene un punteggio di 100 in performance su un emulatore Moto G4 con throttling della CPU a 4x su reti 4G lente.
 

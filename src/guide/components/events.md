@@ -17,6 +17,7 @@ if (typeof window !== 'undefined') {
   }
 }
 </script>
+
 # Eventi dei componenti {#component-events}
 
 > Si assume che tu abbia già letto le [Basi dei componenti](/guide/essentials/component-basics). Leggi prima quello se sei nuovo al concetto di componente.
@@ -31,7 +32,7 @@ Un componente può emettere eventi personalizzati direttamente nelle espressioni
 
 ```vue-html
 <!-- MyComponent -->
-<button @click="$emit('someEvent')">cliccami</button>
+<button @click="$emit('someEvent')">Cliccami</button>
 ```
 
 <div class="options-api">
@@ -176,14 +177,14 @@ export default {
 
 </div>
 
-L'opzione `emits` supporta anche una sintassi ad oggetto, che ci consente di eseguire la convalida a runtime del payload degli eventi emessi:
+L'opzione `emits` e la macro `defineEmits()` supportano anche una sintassi ad oggetto. Se usi TypeScript puoi tipizzare gli argomenti, che ci consente di eseguire la convalida a runtime del payload degli eventi emessi:
 
 <div class="composition-api">
 
 ```vue
-<script setup>
+<script setup lang="ts">
 const emit = defineEmits({
-  submit(payload) {
+  submit(payload: { email: string, password: string }) {
     // restituisci `true` o `false` per indicare
     // il superamento / fallimento della convalida
   }
@@ -210,7 +211,7 @@ Più dettagli: [Tipizzare gli emits dei componenti](/guide/typescript/compositio
 ```js
 export default {
   emits: {
-    submit(payload) {
+    submit(payload: { email: string, password: string }) {
       // restituisci `true` o `false` per indicare
       // il superamento / fallimento della convalida
     }

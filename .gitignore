@@ -98,6 +98,7 @@ dist/
 # vitepress build output
 .vitepress/dist
 .vitepress/cache
+.vitepress/.temp
 
 # Serverless directories
 .serverless/
@@ -110,6 +111,9 @@ src/api/index.json
 src/examples/data.json
 src/tutorial/data.json
 draft.md
+
+# folders created by IDE
+.idea
 
 # vscode specific folders
 .vscode/

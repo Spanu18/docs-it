@@ -1,10 +1,19 @@
 import fs from 'fs'
 import path from 'path'
-import { defineConfigWithTheme } from 'vitepress'
+import {
+  defineConfigWithTheme,
+  type HeadConfig,
+  type Plugin
+} from 'vitepress'
 import type { Config as ThemeConfig } from '@vue/theme'
+import llmstxt from 'vitepress-plugin-llms'
 import baseConfig from '@vue/theme/config'
 import { headerPlugin } from './headerMdPlugin'
 // import { textAdPlugin } from './textAdMdPlugin'
+import {
+  groupIconMdPlugin,
+  groupIconVitePlugin
+} from 'vitepress-plugin-group-icons'
 
 const nav: ThemeConfig['nav'] = [
   {
@@ -17,6 +26,7 @@ const nav: ThemeConfig['nav'] = [
       { text: 'Quick Start', link: '/guide/quick-start' },
       // { text: 'Style Guide', link: '/style-guide/' },
       { text: 'Glossario', link: '/glossary/' },
+      { text: 'Error Reference', link: '/error-reference/' },
       {
         text: 'Vue 2 Docs',
         link: 'https://v2.vuejs.org'
@@ -45,9 +55,14 @@ const nav: ThemeConfig['nav'] = [
         items: [
           { text: 'Partner', link: '/partners/' },
           { text: 'Temi', link: '/ecosystem/themes' },
+          { text: 'UI Components', link: 'https://ui-libs.vercel.app/' },
+          {
+            text: 'Plugins Collection',
+            link: 'https://www.vue-plugins.org/'
+          },
           {
             text: 'Certificazioni',
-            link: 'https://certification.vuejs.org/?ref=vuejs-nav'
+            link: 'https://certificates.dev/vuejs/?ref=vuejs-nav'
           },
           { text: 'Offerte di Lavoro', link: 'https://vuejobs.com/?ref=vuejs' },
           { text: 'T-Shirt Shop', link: 'https://vue.threadless.com/' }
@@ -92,7 +107,7 @@ const nav: ThemeConfig['nav'] = [
         text: 'Notizie',
         items: [
           { text: 'Blog', link: 'https://blog.vuejs.org/' },
-          { text: 'Twitter', link: 'https://twitter.com/vuejs' },
+          { text: 'Twitter', link: 'https://x.com/vuejs' },
           { text: 'Eventi', link: 'https://events.vuejs.org/' },
           { text: 'Newsletters', link: '/ecosystem/newsletters' }
         ]
@@ -111,6 +126,7 @@ const nav: ThemeConfig['nav'] = [
         link: '/about/community-guide'
       },
       { text: 'Codice di condotta', link: '/about/coc' },
+      { text: 'Privacy Policy', link: '/about/privacy' },
       {
         text: 'Il Documentario',
         link: 'https://www.youtube.com/watch?v=OrxmtDw4pVI'
@@ -123,8 +139,8 @@ const nav: ThemeConfig['nav'] = [
   },
   {
     text: 'Partners',
-    link: '/partners/',
-    activeMatch: `^/partners/`
+    activeMatch: `^/partners/`,
+    link: '/partners/'
   }
 ]
 
@@ -182,6 +198,10 @@ export const sidebar: ThemeConfig['sidebar'] = {
         {
           text: 'Nozioni base sui Componenti',
           link: '/guide/essentials/component-basics'
+        },
+        {
+          text: 'Lifecycle Hooks',
+          link: '/guide/essentials/lifecycle'
         }
       ]
     },
@@ -365,6 +385,10 @@ export const sidebar: ThemeConfig['sidebar'] = {
         {
           text: 'Dependency Injection',
           link: '/api/composition-api-dependency-injection'
+        },
+        {
+          text: 'Helpers',
+          link: '/api/composition-api-helpers'
         }
       ]
     },
@@ -414,10 +438,12 @@ export const sidebar: ThemeConfig['sidebar'] = {
     {
       text: 'API Avanzate',
       items: [
+        { text: 'Custom Elements', link: '/api/custom-elements' },
         { text: 'Render Function', link: '/api/render-function' },
         { text: 'Rendering Server Side', link: '/api/ssr' },
         { text: 'Types delle Utility TypeScript', link: '/api/utility-types' },
-        { text: 'Renderer Personalizzato', link: '/api/custom-renderer' }
+        { text: 'Renderer Personalizzato', link: '/api/custom-renderer' },
+        { text: 'Compile-Time Flags', link: '/api/compile-time-flags' }
       ]
     }
   ],
@@ -481,10 +507,6 @@ export const sidebar: ThemeConfig['sidebar'] = {
         {
           text: 'Lista con Transizioni',
           link: '/examples/#list-transition'
-        },
-        {
-          text: 'TodoMVC',
-          link: '/examples/#todomvc'
         }
       ]
     },
@@ -589,8 +611,23 @@ export const sidebar: ThemeConfig['sidebar'] = {
   ariaSidebarNav: 'Navigazione secondaria' 
 }
 
+function inlineScript(file: string): HeadConfig {
+  return [
+    'script',
+    {},
+    fs.readFileSync(
+      path.resolve(__dirname, `./inlined-scripts/${file}`),
+      'utf-8'
+    )
+  ]
+}
+
 export default defineConfigWithTheme<ThemeConfig>({
   extends: baseConfig,
+
+  sitemap: {
+    hostname: 'https://vuejs.org'
+  },
 
   lang: 'it-IT',
   title: 'Vue.js',
@@ -600,30 +637,34 @@ export default defineConfigWithTheme<ThemeConfig>({
 
   head: [
     ['meta', { name: 'theme-color', content: '#3c8772' }],
-    ['meta', { name: 'twitter:site', content: '@vuejs' }],
-    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { property: 'og:url', content: 'https://vuejs.org/' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: 'Vue.js' }],
     [
       'meta',
       {
-        name: 'twitter:image',
+        property: 'og:description',
+        content: 'Vue.js - The Progressive JavaScript Framework'
+      }
+    ],
+    [
+      'meta',
+      {
+        property: 'og:image',
         content: 'https://vuejs.org/images/logo.png'
       }
     ],
+    ['meta', { name: 'twitter:site', content: '@vuejs' }],
+    ['meta', { name: 'twitter:card', content: 'summary' }],
     [
       'link',
       {
         rel: 'preconnect',
-        href: 'https://sponsors.vuejs.org'
+        href: 'https://automation.vuejs.org'
       }
     ],
-    [
-      'script',
-      {},
-      fs.readFileSync(
-        path.resolve(__dirname, './inlined-scripts/restorePreference.js'),
-        'utf-8'
-      )
-    ],
+    inlineScript('restorePreference.js'),
+    inlineScript('uwu.js'),
     [
       'script',
       {
@@ -636,7 +677,7 @@ export default defineConfigWithTheme<ThemeConfig>({
     [
       'script',
       {
-        src: 'https://vueschool.io/banner.js?affiliate=vuejs&type=top',
+        src: 'https://media.bitterbrains.com/main.js?from=vuejs&type=top',
         async: 'true'
       }
     ]
@@ -690,6 +731,36 @@ export default defineConfigWithTheme<ThemeConfig>({
         repo: 'https://github.com/vuejs-translations/docs-bn'
       },
       {
+        link: 'https://it.vuejs.org',
+        text: 'Italiano',
+        repo: 'https://github.com/vuejs-translations/docs-it'
+      },
+      {
+        link: 'https://fa.vuejs.org',
+        text: 'فارسی',
+        repo: 'https://github.com/vuejs-translations/docs-fa'
+      },
+      {
+        link: 'https://ru.vuejs.org',
+        text: 'Русский',
+        repo: 'https://github.com/vuejs-translations/docs-ru'
+      },
+      {
+        link: 'https://cs.vuejs.org',
+        text: 'Čeština',
+        repo: 'https://github.com/vuejs-translations/docs-cs'
+      },
+      {
+        link: 'https://zh-hk.vuejs.org',
+        text: '繁體中文',
+        repo: 'https://github.com/vuejs-translations/docs-zh-hk'
+      },
+      {
+        link: 'https://pl.vuejs.org',
+        text: 'Polski',
+        repo: 'https://github.com/vuejs-translations/docs-pl'
+      },
+      {
         link: '/translations/',
         text: 'Aiutaci a tradurre!',
         isTranslationsDesc: true
@@ -699,7 +770,7 @@ export default defineConfigWithTheme<ThemeConfig>({
     algolia: {
       indexName: 'vuejs',
       appId: 'ML0LEBN7FQ',
-      apiKey: 'f49cbd92a74532cc55cfbffa5e5a7d01',
+      apiKey: '10e7a8b13e6aec4007343338ab134e05',
       searchParameters: {
         facetFilters: ['version:v3']
       }
@@ -712,8 +783,8 @@ export default defineConfigWithTheme<ThemeConfig>({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/' },
-      { icon: 'twitter', link: 'https://twitter.com/vuejs' },
-      { icon: 'discord', link: 'https://discord.com/invite/HBherRA' }
+      { icon: 'twitter', link: 'https://x.com/vuejs' },
+      { icon: 'discord', link: 'https://discord.com/invite/vue' }
     ],
 
     editLink: {
@@ -731,9 +802,10 @@ export default defineConfigWithTheme<ThemeConfig>({
   },
 
   markdown: {
+    theme: 'github-dark',
     config(md) {
-      md.use(headerPlugin)
-        // .use(textAdPlugin)
+      md.use(headerPlugin).use(groupIconMdPlugin)
+      // .use(textAdPlugin)
     }
   },
 
@@ -757,11 +829,40 @@ export default defineConfigWithTheme<ThemeConfig>({
       }
     },
     build: {
-      minify: 'terser',
       chunkSizeWarningLimit: Infinity
     },
     json: {
       stringify: true
-    }
+    },
+    plugins: [
+      llmstxt({
+        ignoreFiles: [
+          'about/team/**/*',
+          'about/team.md',
+          'about/privacy.md',
+          'about/coc.md',
+          'developers/**/*',
+          'ecosystem/themes.md',
+          'examples/**/*',
+          'partners/**/*',
+          'sponsor/**/*',
+          'index.md'
+        ],
+        customLLMsTxtTemplate: `\
+# Vue.js
+
+Vue.js - The Progressive JavaScript Framework
+
+## Table of Contents
+
+{toc}`
+      }) as Plugin,
+      groupIconVitePlugin({
+        customIcon: {
+          cypress: 'vscode-icons:file-type-cypress',
+          'testing library': 'logos:testing-library'
+        }
+      }) as Plugin
+    ]
   }
 })

@@ -40,7 +40,7 @@ Prima di utilizzare il SSR per la tua app, la prima domanda che dovresti fare è
 
 **Static Site Generation (SSG)**, noto anche come prerendering, è un'altra tecnica popolare per la creazione di siti web veloci. Se i dati necessari per il server-rendering di una pagina sono gli stessi per ogni utente, anziché renderizzare la pagina ogni volta che arriva una richiesta, possiamo renderizzarla solo una volta, in anticipo, durante il processo di build. Le pagine pre-renderizzate vengono generate e servite come file HTML statici.
 
-SSG conserva le stesse caratteristiche di prestazioni delle app SSR: offre ottime prestazioni per il tempo di caricamento del contenuto. Allo stesso tempo, è meno costoso e più semplice da distribuire rispetto alle app SSR perché l'output è costituito da file HTML e risorse statiche. La parola chiave qui è **static**: SSG può essere applicato solo a pagine che consumano dati statici, ovvero dati noti al momento della build e che non cambiano tra le distribuzioni. Ogni volta che i dati cambiano, è necessaria una nuova distribuzione.
+SSG conserva le stesse caratteristiche di prestazioni delle app SSR: offre ottime prestazioni per il tempo di caricamento del contenuto. Allo stesso tempo, è meno costoso e più semplice da distribuire rispetto alle app SSR perché l'output è costituito da file HTML e risorse statiche. La parola chiave qui è **static**: SSG può essere applicato solo a pagine che forniscono dati statici, ovvero dati noti al momento della build e che non cambiano tra le distribuzioni. Ogni volta che i dati cambiano, è necessaria una nuova distribuzione.
 
 Se stai esaminando l'SSR solo per migliorare l'ottimizzazione per i motori di ricerca di alcune pagine di marketing (ad esempio `/`, `/about`, `/contact`, ecc.), probabilmente vuoi l'SSG al posto dell'SSR. L'SSG è anche ottimo per siti basati su contenuti come siti di documentazione o blog. Infatti, il sito web che stai leggendo in questo momento è staticamente generato utilizzando [VitePress](https://vitepress.dev/), un generatore di siti statici alimentato da Vue.
 
@@ -156,8 +156,8 @@ Nota come dobbiamo riutilizzare la stessa implementazione dell'applicazione come
 
 Qui mostreremo la configurazione più semplice possibile. Innanzitutto, dividiamo la logica di creazione dell'app in un file dedicato, `app.js`:
 
-```js
-// app.js (condiviso tra server e client)
+```js [app.js]
+// (condiviso tra server e client)
 import { createSSRApp } from 'vue'
 
 export function createApp() {
@@ -172,8 +172,7 @@ Questo file e le sue dipendenze sono condivisi tra il server e il client - li ch
 
 Il nostro punto di ingresso client importa il codice universale, crea l'applicazione e la monta:
 
-```js
-// client.js
+```js [client.js]
 import { createApp } from './app.js'
 
 createApp().mount('#app')
@@ -181,8 +180,8 @@ createApp().mount('#app')
 
 E il server utilizza la stessa logica di creazione dell'app nell'handler della richiesta:
 
-```js{2,5}
-// server.js (codice irrilevante omesso)
+```js{2,5} [server.js]
+// (codice irrilevante omesso)
 import { createApp } from './app.js'
 
 server.get('/', (req, res) => {
@@ -227,7 +226,7 @@ Un'implementazione completa sarebbe piuttosto complessa e dipenderebbe dalla cat
 
 ### Vite SSR {#vite-ssr}
 
-Vite offre il supporto integrato [per il rendering lato server di Vue](https://vitejs.dev/guide/ssr.html), ma è intenzionalmente di basso livello. Se desideri utilizzare direttamente Vite, dai un'occhiata a [vite-plugin-ssr](https://vite-plugin-ssr.com/), un plugin della comunità che astrae molti dettagli complessi per te.
+Vite offre il supporto integrato [per il rendering lato server di Vue](https://vite.dev/guide/ssr.html), ma è intenzionalmente di basso livello. Se desideri utilizzare direttamente Vite, dai un'occhiata a [vite-plugin-ssr](https://vite-plugin-ssr.com/), un plugin della comunità che astrae molti dettagli complessi per te.
 
 Puoi trovare anche un esempio di progetto Vue + Vite SSR usando una configurazione manuale [qui](https://github.com/vitejs/vite-plugin-vue/tree/main/playground/ssr-vue), che può servire come base su cui costruire. Nota che questa opzione è consigliata solo se hai esperienza con SSR / strumenti di compilazione e desideri avere un controllo completo sull'architettura di livello superiore.
 
@@ -267,8 +266,8 @@ Tecnicamente, potremmo reinizializzare tutti i moduli JavaScript ad ogni richies
 
 La soluzione consigliata è quella di creare una nuova istanza dell'intera applicazione, compreso il router e gli store globali, per ogni richiesta. Quindi, anziché importare direttamente l'applicazione nei nostri componenti, forniamo lo stato condiviso utilizzando il [provide a livello di app](/guide/components/provide-inject#app-level-provide) e lo iniettiamo nei componenti che ne hanno bisogno:
 
-```js
-// app.js (condiviso tra server e client)
+```js [app.js]
+// (condiviso tra server e client)
 import { createSSRApp } from 'vue'
 import { createStore } from './store.js'
 
@@ -313,6 +312,10 @@ Se la struttura del DOM dell'HTML pre-renderizzato non corrisponde all'output at
 3. Il server e il client si trovano in fusi orari diversi. A volte, potremmo voler convertire un timestamp nell'orario locale dell'utente. Tuttavia, il fuso orario durante l'esecuzione sul server e il fuso orario durante l'esecuzione sul client non sono sempre gli stessi, e potremmo non conoscere in modo affidabile il fuso orario dell'utente durante l'esecuzione sul server. In questi casi, la conversione dell'orario locale dovrebbe essere eseguita anche come operazione esclusiva del client.
 
 Quando Vue incontra una discrepanza nella hydration, cercherà di recuperare automaticamente e regolare il DOM pre-renderizzato in modo da corrispondere allo stato lato client. Questo comporterà una perdita di prestazioni di rendering a causa del rifiuto di nodi non corretti e del montaggio di nuovi nodi, ma nella maggior parte dei casi, l'app dovrebbe continuare a funzionare come previsto. Detto ciò, è comunque meglio eliminare le discrepanze nella hydration durante lo sviluppo.
+
+#### Suppressing Hydration Mismatches <sup class="vt-badge" data-text="3.5+" /> {#suppressing-hydration-mismatches}
+
+In Vue 3.5+, it is possible to selectively suppress inevitable hydration mismatches by using the [`data-allow-mismatch`](/api/ssr#data-allow-mismatch) attribute.
 
 ### Direttive personalizzate {#custom-directives}
 

@@ -120,7 +120,7 @@ Un tag `<style module>` viene compilato come [moduli CSS](https://github.com/css
 
 Le classi risultanti sono hashate per evitare collisioni, ottenendo lo stesso effetto di delimitazione degli stili CSS per il solo componente corrente.
 
-Fai riferimento alle [spec dei moduli CSS](https://github.com/css-modules/css-modules) per ulteriori dettagli come le [eccezioni globali](https://github.com/css-modules/css-modules#exceptions) e [composition](https://github.com/css-modules/css-modules#composition).
+Fai riferimento alle [spec dei moduli CSS](https://github.com/css-modules/css-modules) per ulteriori dettagli come le [eccezioni globali](https://github.com/css-modules/css-modules/blob/master/docs/composition.md#exceptions) e [composition](https://github.com/css-modules/css-modules/blob/master/docs/composition.md#composition).
 
 ### Nome Personalizzato per Inject {#custom-inject-name}
 
@@ -153,6 +153,26 @@ useCssModule()
 useCssModule('classes')
 ```
 
+- **Example**
+
+```vue
+<script setup lang="ts">
+import { useCssModule } from 'vue'
+
+const classes = useCssModule()
+</script>
+
+<template>
+  <p :class="classes.red">red</p>
+</template>
+
+<style module>
+.red {
+  color: red;
+}
+</style>
+```
+
 ## `v-bind()` in CSS {#v-bind-in-css}
 
 Le etichette `<style>` dei SFC supportano il collegamento dei valori CSS allo stato dinamico del componente utilizzando la funzione CSS `v-bind`:
@@ -183,9 +203,10 @@ La sintassi funziona con [`<script setup>`](./sfc-script-setup), e supporta espr
 
 ```vue
 <script setup>
-const theme = {
-  color: 'red'
-}
+import { ref } from 'vue'
+const theme = ref({
+    color: 'red',
+})
 </script>
 
 <template>

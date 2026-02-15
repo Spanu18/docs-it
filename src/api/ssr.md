@@ -213,10 +213,30 @@ Un'API di runtime utilizzata per recuperare l'oggetto di contesto passato a `ren
   import { useSSRContext } from 'vue'
 
   // assicurati di chiamarlo solo durante l'SSR
-  // https://vitejs.dev/guide/ssr.html#conditional-logic
+  // https://vite.dev/guide/ssr.html#conditional-logic
   if (import.meta.env.SSR) {
     const ctx = useSSRContext()
     // ...allega proprietà al contesto
   }
   </script>
   ```
+
+## data-allow-mismatch <sup class="vt-badge" data-text="3.5+" /> {#data-allow-mismatch}
+
+A special attribute that can be used to suppress [hydration mismatch](/guide/scaling-up/ssr#hydration-mismatch) warnings.
+
+- **Example**
+
+  ```html
+  <div data-allow-mismatch="text">{{ data.toLocaleString() }}</div>
+  ```
+
+  The value can limit the allowed mismatch to a specific type. Allowed values are:
+
+  - `text`
+  - `children` (only allows mismatch for direct children)
+  - `class`
+  - `style`
+  - `attribute`
+
+  If no value is provided, all types of mismatches will be allowed.

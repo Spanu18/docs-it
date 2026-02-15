@@ -134,7 +134,7 @@ Per `v-for` annidati, anche lo scope funziona in modo simile alle funzioni annid
 
 ## `v-for` con un Oggetto {#v-for-with-an-object}
 
-Puoi anche utilizzare `v-for` per iterare attraverso le proprietà di un oggetto. L'ordine dell'iterazione sarà basato sul risultato dell'invocazione di `Object.keys()` sull'oggetto:
+Puoi anche utilizzare `v-for` per iterare attraverso le proprietà di un oggetto. L'ordine dell'iterazione sarà basato sul risultato dell'invocazione di `Object.values()` sull'oggetto:
 
 <div class="composition-api">
 
@@ -169,7 +169,7 @@ data() {
     {{ value }}
   </li>
 </ul>
-```
+```Maintaining State with `key`
 
 Puoi anche fornire un secondo alias per il nome della proprietà (anche noto come `key`):
 
@@ -223,10 +223,6 @@ Come con `v-if`, nel template puoi usare un tag `<template>` anche con `v-for` p
 
 ## `v-for` con `v-if` {#v-for-with-v-if}
 
-:::warning Nota
-**Non** è consigliato utilizzare `v-if` e `v-for` sullo stesso elemento a causa della precedenza implicita. Fare riferimento alla [guida di stile](/style-guide/rules-essential#avoid-v-if-with-v-for) per i dettagli.
-:::
-
 Quando esistono sullo stesso nodo, `v-if` ha una priorità maggiore rispetto a `v-for`. Ciò significa che la condizione `v-if` non avrà accesso alle variabili dallo scope di `v-for`:
 
 ```vue-html
@@ -275,7 +271,7 @@ Quando si utilizza `<template v-for>`, la `key` deve essere posizionata sul cont
 L'attributo `key` qui è uno speciale attributo legato a `v-bind`, e non va confuso con la "chiave" della proprietà di un oggetto, come quando si [utilizza v-for con un oggetto](#v-for-with-an-object).
 :::
 
-[Si raccomanda](/style-guide/rules-essential#use-keyed-v-for) di fornire un attributo `key` con `v-for` ogni volta che è possibile, a meno che il contenuto DOM iterato non sia semplice (cioè non contenga componenti o elementi DOM con stato), o si stia volutamente facendo affidamento sul comportamento predefinito per aumentare le prestazioni.
+Si raccomanda di fornire un attributo `key` con `v-for` ogni volta che è possibile, a meno che il contenuto DOM iterato non sia semplice (cioè non contenga componenti o elementi DOM con stato), o si stia volutamente facendo affidamento sul comportamento predefinito per aumentare le prestazioni.
 
 Il binding della `key` si aspetta valori primitivi, cioè stringhe e numeri. Non utilizzare oggetti come chiavi per `v-for`. Per un utilizzo dettagliato dell'attributo `key`, si prega di consultare la documentazione dell'[API `key`](/api/built-in-special-attributes#key).
 

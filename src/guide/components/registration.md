@@ -8,7 +8,7 @@ Un componente Vue deve essere "registrato" affinché Vue sappia dove trovare la 
 
 ## Registrazione Globale {#registrazione-globale}
 
-Possiamo rendere i componenti disponibili globalmente nell'attuale applicazione Vue utilizzando il metodo app.component():
+Possiamo rendere i componenti disponibili globalmente nell'attuale [applicazione Vue](/guide/essentials/application) utilizzando il metodo `.component()`:
 
 ```js
 import { createApp } from 'vue'
@@ -33,7 +33,7 @@ import MyComponent from './App.vue'
 app.component('MyComponent', MyComponent)
 ```
 
-Il metodo `app.component()` può essere concatenato:
+Il metodo `.component()` può essere concatenato:
 
 ```js
 app
@@ -136,6 +136,6 @@ In tutta la guida, stiamo utilizzando nomi in PascalCase durante la registrazion
 
 2. L'utilizzo di `<PascalCase />` rende più evidente che si tratta di un componente Vue e non di un elemento HTML nativo nei template. Inoltre, differenzia i componenti Vue dagli elementi personalizzati (web components).
 
-Questo è lo stile raccomandato quando si lavora con SFC o stringhe di template. Tuttavia, come discusso in [DOM Template Parsing Caveats](/guide/essentials/component-basics#dom-template-parsing-caveats), i tag PascalCase non sono utilizzabili nei DOM templates.
+Questo è lo stile raccomandato quando si lavora con SFC o stringhe di template. Tuttavia, come discusso in [in-DOM Template Parsing Caveats](/guide/essentials/component-basics#in-dom-template-parsing-caveats), i tag PascalCase non sono utilizzabili nei in-DOM templates.
 
-Fortunatamente, Vue supporta la risoluzione dei tag in kebab-case per i componenti registrati utilizzando PascalCase. Ciò significa che un componente registrato come `MyComponent` può essere referenziato nel template sia tramite `<MyComponent>` che `<my-component>`. Ciò ci consente di utilizzare lo stesso codice di registrazione del componente JavaScript indipendentemente dalla fonte del template.
+Fortunatamente, Vue supporta la risoluzione dei tag in kebab-case per i componenti registrati utilizzando PascalCase. Ciò significa che un componente registrato come `MyComponent` può essere referenziato in un template di Vue (o all'interno di un elemento HTML renderizzato da Vue) sia tramite `<MyComponent>` che `<my-component>`. Ciò ci consente di utilizzare lo stesso codice di registrazione del componente JavaScript indipendentemente dalla fonte del template.

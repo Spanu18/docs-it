@@ -63,7 +63,7 @@ Le proprietà restituite dall'oggetto saranno rese disponibili nel template. Ecc
 
 ```vue-html
 <h1>{{ message }}</h1>
-<p>conteggio: {{ counter.count }}</p>
+<p>Conteggio: {{ counter.count }}</p>
 ```
 
 Si noti come non sia necessario usare `.value` quando si accede al ref `message` nei templates: viene automaticamente estratto per un uso più sintetico.

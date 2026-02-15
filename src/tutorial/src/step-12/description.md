@@ -5,8 +5,7 @@ Un componente figlio può accettare input dal padre tramite **props**. Per prima
 <div class="composition-api">
 <div class="sfc">
 
-```vue
-<!-- ChildComp.vue -->
+```vue [ChildComp.vue]
 <script setup>
 const props = defineProps({
   msg: String

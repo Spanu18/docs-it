@@ -11,7 +11,7 @@ Registers a callback to be called after the component has been mounted.
 - **Type**
 
   ```ts
-  function onMounted(callback: () => void): void
+  function onMounted(callback: () => void, target?: ComponentInternalInstance | null): void
   ```
 
 - **Details**
@@ -53,7 +53,7 @@ Registers a callback to be called after the component has updated its DOM tree d
 - **Type**
 
   ```ts
-  function onUpdated(callback: () => void): void
+  function onUpdated(callback: () => void, target?: ComponentInternalInstance | null): void
   ```
 
 - **Details**
@@ -96,7 +96,7 @@ Registers a callback to be called after the component has been unmounted.
 - **Type**
 
   ```ts
-  function onUnmounted(callback: () => void): void
+  function onUnmounted(callback: () => void, target?: ComponentInternalInstance | null): void
   ```
 
 - **Details**
@@ -135,7 +135,7 @@ Registers a hook to be called right before the component is to be mounted.
 - **Type**
 
   ```ts
-  function onBeforeMount(callback: () => void): void
+  function onBeforeMount(callback: () => void, target?: ComponentInternalInstance | null): void
   ```
 
 - **Details**
@@ -151,7 +151,7 @@ Registers a hook to be called right before the component is about to update its 
 - **Type**
 
   ```ts
-  function onBeforeUpdate(callback: () => void): void
+  function onBeforeUpdate(callback: () => void, target?: ComponentInternalInstance | null): void
   ```
 
 - **Details**
@@ -167,7 +167,7 @@ Registers a hook to be called right before a component instance is to be unmount
 - **Type**
 
   ```ts
-  function onBeforeUnmount(callback: () => void): void
+  function onBeforeUnmount(callback: () => void, target?: ComponentInternalInstance | null): void
   ```
 
 - **Details**
@@ -206,7 +206,11 @@ Registers a hook to be called when an error propagating from a descendant compon
 
   The hook receives three arguments: the error, the component instance that triggered the error, and an information string specifying the error source type.
 
-  You can modify component state in `errorCaptured()` to display an error state to the user. However, it is important that the error state should not render the original content that caused the error; otherwise the component will be thrown into an infinite render loop.
+  :::tip
+  In production, the 3rd argument (`info`) will be a shortened code instead of the full information string. You can find the code to string mapping in the [Production Error Code Reference](/error-reference/#runtime-errors).
+  :::
+
+  You can modify component state in `onErrorCaptured()` to display an error state to the user. However, it is important that the error state should not render the original content that caused the error; otherwise the component will be thrown into an infinite render loop.
 
   The hook can return `false` to stop the error from propagating further. See error propagation details below.
 
@@ -278,7 +282,7 @@ Registers a callback to be called after the component instance is inserted into 
 - **Type**
 
   ```ts
-  function onActivated(callback: () => void): void
+  function onActivated(callback: () => void, target?: ComponentInternalInstance | null): void
   ```
 
 - **See also** [Guide - Lifecycle of Cached Instance](/guide/built-ins/keep-alive#lifecycle-of-cached-instance)
@@ -292,7 +296,7 @@ Registers a callback to be called after the component instance is removed from t
 - **Type**
 
   ```ts
-  function onDeactivated(callback: () => void): void
+  function onDeactivated(callback: () => void, target?: ComponentInternalInstance | null): void
   ```
 
 - **See also** [Guide - Lifecycle of Cached Instance](/guide/built-ins/keep-alive#lifecycle-of-cached-instance)

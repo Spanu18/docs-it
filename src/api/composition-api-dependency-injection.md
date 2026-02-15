@@ -23,17 +23,17 @@ Provides a value that can be injected by descendant components.
   ```vue
   <script setup>
   import { ref, provide } from 'vue'
-  import { fooSymbol } from './injectionSymbols'
+  import { countSymbol } from './injectionSymbols'
 
   // provide static value
-  provide('foo', 'bar')
+  provide('path', '/project/')
 
   // provide reactive value
   const count = ref(0)
   provide('count', count)
 
   // provide with Symbol keys
-  provide(fooSymbol, count)
+  provide(countSymbol, count)
   </script>
   ```
 
@@ -64,7 +64,7 @@ Injects a value provided by an ancestor component or the application (via `app.p
 
 - **Details**
 
-  The first argument is the injection key. Vue will walk up the parent chain to locate a provided value with a matching key. If multiple components in the parent chain provides the same key, the one closest to the injecting component will "shadow" those higher up the chain. If no value with matching key was found, `inject()` returns `undefined` unless a default value is provided.
+  The first argument is the injection key. Vue will walk up the parent chain to locate a provided value with a matching key. If multiple components in the parent chain provide the same key, the one closest to the injecting component will "shadow" those higher up the chain and its value will be used. If no value with matching key was found, `inject()` returns `undefined` unless a default value is provided.
 
   The second argument is optional and is the default value to be used when no matching value was found.
 
@@ -81,19 +81,19 @@ Injects a value provided by an ancestor component or the application (via `app.p
   ```vue
   <script setup>
   import { inject } from 'vue'
-  import { fooSymbol } from './injectionSymbols'
+  import { countSymbol } from './injectionSymbols'
 
   // inject static value without default
-  const foo = inject('foo')
+  const path = inject('path')
 
   // inject reactive value
   const count = inject('count')
 
   // inject with Symbol keys
-  const foo2 = inject(fooSymbol)
+  const count2 = inject(countSymbol)
 
   // inject with default value
-  const bar = inject('foo', 'default value')
+  const bar = inject('path', '/default-path')
 
   // inject with function default value
   const fn = inject('function', () => {})
@@ -102,7 +102,19 @@ Injects a value provided by an ancestor component or the application (via `app.p
   const baz = inject('factory', () => new ExpensiveObject(), true)
   </script>
   ```
-
+  
 - **See also**
   - [Guide - Provide / Inject](/guide/components/provide-inject)
   - [Guide - Typing Provide / Inject](/guide/typescript/composition-api#typing-provide-inject) <sup class="vt-badge ts" />
+
+## hasInjectionContext() {#has-injection-context}
+
+- Only supported in 3.3+
+
+Returns true if [inject()](#inject) can be used without warning about being called in the wrong place (e.g. outside of `setup()`). This method is designed to be used by libraries that want to use `inject()` internally without triggering a warning to the end user.
+
+- **Type**
+
+  ```ts
+  function hasInjectionContext(): boolean
+  ```

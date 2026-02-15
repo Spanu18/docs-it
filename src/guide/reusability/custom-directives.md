@@ -1,12 +1,34 @@
 # Le Direttive Personalizzate {#custom-directives}
 
 <script setup>
-const vFocus = {
+const vHighlight = {
   mounted: el => {
-    el.focus()
+    el.classList.add('is-highlight')
   }
 }
 </script>
+
+<style>
+.vt-doc p.is-highlight {
+  margin-bottom: 0;
+}
+
+.is-highlight {
+  background-color: yellow;
+  color: black;
+}
+</style>
+
+<style>
+.vt-doc p.is-highlight {
+  margin-bottom: 0;
+}
+
+.is-highlight {
+  background-color: yellow;
+  color: black;
+}
+</style>
 
 ## Introduzione {#introduction}
 
@@ -14,7 +36,120 @@ Oltre all'insieme di direttive predefinite incluse nel core (come `v-model` o `v
 
 Abbiamo introdotto due forme di riutilizzo del codice in Vue: i [componenti](/guide/essentials/component-basics) e i [composables](./composables). I componenti sono i principali mattoni di costruzione, mentre i composables sono incentrati sul riutilizzo della logica con stato. Le direttive personalizzate, invece, sono principalmente destinate al riutilizzo della logica che coinvolge l'accesso al DOM di basso livello su elementi semplici.
 
-Una direttiva personalizzata è definita come un oggetto contenente degli hook del ciclo di vita simili a quelli di un componente. Gli hook ricevono l'elemento a cui è legata la direttiva. Ecco un esempio di una direttiva che mette a fuoco un input quando l'elemento viene inserito nel DOM da Vue:
+A custom directive is defined as an object containing lifecycle hooks similar to those of a component. The hooks receive the element the directive is bound to. Here is an example of a directive that adds a class to an element when it is inserted into the DOM by Vue:
+
+<div class="composition-api">
+
+```vue
+<script setup>
+// enables v-highlight in templates
+const vHighlight = {
+  mounted: (el) => {
+    el.classList.add('is-highlight')
+  }
+}
+</script>
+
+## Introduction {#introduction}
+
+In addition to the default set of directives shipped in core (like `v-model` or `v-show`), Vue also allows you to register your own custom directives.
+
+We have introduced two forms of code reuse in Vue: [components](/guide/essentials/component-basics) and [composables](./composables). Components are the main building blocks, while composables are focused on reusing stateful logic. Custom directives, on the other hand, are mainly intended for reusing logic that involves low-level DOM access on plain elements.
+
+Una direttiva personalizzata è definita come un oggetto contenente degli hook del ciclo di vita simili a quelli di un componente. Gli hook ricevono l'elemento a cui è legata la direttiva. Ecco un esempio di una direttica che aggiunge una classe ad un elemento quando è inserito nel DOM da Vue:
+
+<div class="composition-api">
+
+```vue
+<script setup>
+// enables v-highlight in templates
+const vHighlight = {
+  mounted: (el) => {
+    el.classList.add('is-highlight')
+  }
+}
+</script>
+
+<template>
+  <p v-highlight>This sentence is important!</p>
+</template>
+```
+
+</div>
+
+<div class="options-api">
+
+```js
+const highlight = {
+  mounted: (el) => el.classList.add('is-highlight')
+}
+
+export default {
+  directives: {
+    // enables v-highlight in template
+    highlight
+  }
+}
+```
+
+```vue-html
+<p v-highlight>This sentence is important!</p>
+```
+
+</div>
+
+<div class="demo">
+  <p v-highlight>This sentence is important!</p>
+</div>
+
+<div class="composition-api">
+
+In `<script setup>`, any camelCase variable that starts with the `v` prefix can be used as a custom directive. In the example above, `vHighlight` can be used in the template as `v-highlight`.
+
+If you are not using `<script setup>`, custom directives can be registered using the `directives` option:
+
+```js
+export default {
+  setup() {
+    /*...*/
+  },
+  directives: {
+    // enables v-highlight in template
+    highlight: {
+      /* ... */
+    }
+  }
+}
+```
+
+</div>
+
+<div class="options-api">
+
+Similar to components, custom directives must be registered so that they can be used in templates. In the example above, we are using local registration via the `directives` option.
+
+</div>
+
+It is also common to globally register custom directives at the app level:
+
+```js
+const app = createApp({})
+
+// make v-highlight usable in all components
+app.directive('highlight', {
+  /* ... */
+})
+```
+
+It is possible to type global custom directives by extending the `GlobalDirectives` interface from `vue`
+
+More Details: [Typing Custom Global Directives](/guide/typescript/composition-api#typing-global-custom-directives) <sup class="vt-badge ts" />
+
+## When to use custom directives {#when-to-use}
+
+Custom directives should only be used when the desired functionality can only be achieved via direct DOM manipulation.
+
+A common example of this is a `v-focus` custom directive that brings an element into focus.
 
 <div class="composition-api">
 
@@ -54,54 +189,9 @@ export default {
 
 </div>
 
-<div class="demo">
-  <input v-focus placeholder="Questo dovrebbe essere a fuoco" />
-</div>
+This directive is more useful than the `autofocus` attribute because it works not just on page load - it also works when the element is dynamically inserted by Vue!
 
-Supponendo che tu non abbia cliccato altrove sulla pagina, l'input qui sopra dovrebbe essere messo a fuoco automaticamente. Questa direttiva è più utile dell'attributo `autofocus` perché funziona non solo al caricamento della pagina - funziona anche quando l'elemento viene inserito dinamicamente da Vue.
-
-<div class="composition-api">
-
-In `<script setup>`, qualsiasi variabile camelCase che inizia con il prefisso `v` può essere utilizzata come direttiva personalizzata. Nell'esempio sopra, `vFocus` può essere utilizzata nel template come `v-focus`.
-
-Se non si utilizza `<script setup>`, le direttive personalizzate possono essere registrate utilizzando l'opzione `directives`:
-
-```js
-export default {
-  setup() {
-    /*...*/
-  },
-  directives: {
-    // abilita v-focus nei template
-    focus: {
-      /* ... */
-    }
-  }
-}
-```
-
-</div>
-
-<div class="options-api">
-
-Come per i componenti, le direttive personalizzate devono essere registrate affinché possano essere utilizzate nei template. Nell'esempio sopra, stiamo utilizzando la registrazione locale tramite l'opzione `directives`.
-
-</div>
-
-È una pratica comune registrare globalmente le direttive personalizzate a livello di app:
-
-```js
-const app = createApp({})
-
-// rendi v-focus utilizzabile in tutti i componenti
-app.directive('focus', {
-  /* ... */
-})
-```
-
-:::tip
-Le direttive personalizzate dovrebbero essere utilizzate solo quando la funzionalità desiderata può essere ottenuta solo attraverso la manipolazione diretta del DOM. Cerca di utilizzare, quando possibile, l'utilizzo di template dichiarativi con direttive native come `v-bind`, poiché sono più efficienti e compatibili con il rendering lato server.
-:::
+Declarative templating with built-in directives such as `v-bind` is recommended when possible because they are more efficient and server-rendering friendly.
 
 ## Directive Hooks {#directive-hooks}
 
@@ -111,23 +201,23 @@ Un oggetto che definisce la direttiva può fornire diverse funzioni hook (tutte 
 const myDirective = {
   // Chiamato prima dell'applicazione degli attributi o 
   // dei listener di eventi all'elemento a cui è legato
-  created(el, binding, vnode, prevVnode) {
+  created(el, binding, vnode) {
     // vedi sotto per i dettagli sugli argomenti
   },
   // chiamato subito prima che l'elemento venga inserito nel DOM.
-  beforeMount(el, binding, vnode, prevVnode) {},
+  beforeMount(el, binding, vnode) {},
   // chiamato quando il componente genitore dell'elemento a cui è legato
   // e tutti i suoi figli sono montati.
-  mounted(el, binding, vnode, prevVnode) {},
+  mounted(el, binding, vnode) {},
   // chiamato prima che il componente genitore venga aggiornato
   beforeUpdate(el, binding, vnode, prevVnode) {},
   // chiamato dopo che il componente genitore e
   // tutti i suoi figli sono stati aggiornati
   updated(el, binding, vnode, prevVnode) {},
   // chiamato prima che il componente genitore venga smontato
-  beforeUnmount(el, binding, vnode, prevVnode) {},
+  beforeUnmount(el, binding, vnode) {},
   // chiamato quando il componente genitore viene smontato
-  unmounted(el, binding, vnode, prevVnode) {}
+  unmounted(el, binding, vnode) {}
 }
 ```
 
@@ -147,7 +237,7 @@ Gli hook delle direttive ricevono questi argomenti:
   - `dir`: l'oggetto di definizione della direttiva.
 
 - `vnode`: il VNode sottostante che rappresenta l'elemento a cui è legato.
-- `prevNode`:  il VNode che rappresenta l'elemento a cui è legato dal render precedente. Disponibile solo negli hook `beforeUpdate` e `updated`.
+- `prevVnode`:  il VNode che rappresenta l'elemento a cui è legato dal render precedente. Disponibile solo negli hook `beforeUpdate` e `updated`.
 
 Come esempio, considera il seguente uso della direttiva:
 
@@ -209,6 +299,10 @@ app.directive('demo', (el, binding) => {
 ```
 
 ## Utilizzo con i Componenti {#usage-on-components}
+
+:::warning Not recommended
+Using custom directives on components is not recommended. Unexpected behaviour may occur when a component has multiple root nodes.
+:::
 
 Quando utilizzate con i componenti, le direttive personalizzate verranno sempre applicate al nodo radice del componente, in modo simile agli [Attributi Trasferibili (Fallthrough)](/guide/components/attrs).
 

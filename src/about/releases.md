@@ -58,6 +58,8 @@ Questo è un problema che riguarda solo gli autori di librerie, perché nelle ap
 
 Gli update minori di solito passano attraverso un numero non fisso di versioni beta. Gli update più grandi passeranno attraverso una fase alpha e una fase beta.
 
+Inoltre, pubblichiamo ogni settimana le versioni canary dai branch `main` e `minor` su GitHub. Vengono pubblicate come pacchetti separati per evitare di appesantire i metadati npm del canale stabile. È possibile installarle rispettivamente tramite `npx install-vue@canary` o `npx install-vue@canary-minor`.
+
 Gli update pre-rilascio sono per i test di integrazione e stabilità, e per i primi utenti che desiderano fornire feedback sulle funzionalità non ancora stabili. Non utilizzare le versioni pre-rilascio in production. Tutte le versioni pre-rilascio sono considerate non stabili, quindi assicurati di specificare le versioni corrette quando utilizzi le versioni pre-rilascio.
 
 ## Deprecare features {#deprecations}

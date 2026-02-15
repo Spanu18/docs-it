@@ -1,5 +1,9 @@
 # Nozioni base sui Componenti {#components-basics}
 
+<ScrimbaLink href="https://scrimba.com/links/vue-component-basics" title="Free Vue.js Components Basics Lesson" type="scrimba">
+  Watch an interactive video lesson on Scrimba
+</ScrimbaLink>
+
 I componenti ci permettono di dividere l'interfaccia utente in parti indipendenti e riutilizzabili, e di pensare a ciascuna parte in modo separato. È normale che un'app sia organizzata in un albero di componenti annidati:
 
 ![Albero dei Componenti](./images/components.png)
@@ -174,7 +178,7 @@ Se stai usando i tuoi template direttamente in un DOM (ad es. come contenuto di 
 <button-counter></button-counter>
 ```
 
-Consulta i [problemi dell'analisi del template DOM](#dom-template-parsing-caveats) per maggiori dettagli.
+Consulta le [avvertenze relative all'analisi dei modelli in-DOM](#in-dom-template-parsing-caveats) per maggiori dettagli.
 
 ## Passaggio delle Props {#passing-props}
 
@@ -184,8 +188,7 @@ Le props sono attributi personalizzati che puoi registrare su un componente. Per
 
 <div class="options-api">
 
-```vue
-<!-- BlogPost.vue -->
+```vue [BlogPost.vue]
 <script>
 export default {
   props: ['title']
@@ -202,8 +205,7 @@ Quando un valore viene passato a un attributo prop, diventa una proprietà di qu
 </div>
 <div class="composition-api">
 
-```vue
-<!-- BlogPost.vue -->
+```vue [BlogPost.vue]
 <script setup>
 defineProps(['title'])
 </script>
@@ -298,7 +300,7 @@ E per ciascuna voce, vorresti poter renderizzare un componente utilizzando `v-fo
 
 </div>
 
-Nota come `v-bind` venga utilizzato per passare valori di props dinamici. Questo è particolarmente utile quando non si conosce in anticipo l'esatto contenuto che si andrà a renderizzare.
+Nota come [la sintassi `v-bind`](/api/built-in-directives#v-bind) (`:title="post.title"`) venga utilizzata per passare valori di props dinamici. Questo è particolarmente utile quando non si conosce in anticipo l'esatto contenuto che si andrà a renderizzare.
 
 Questo è tutto ciò che c'è da sapere sulle props per ora, ma una volta che avrai finito di leggere questa pagina e ti sentirai a tuo agio con il suo contenuto, ti consigliamo di tornare in seguito a leggere la guida completa sulle [Props](/guide/components/props).
 
@@ -348,8 +350,8 @@ La quale può essere utilizzata nel template per controllare la dimensione del c
 
 Ora aggiungiamo un pulsante al template del componente `<BlogPost>`:
 
-```vue{5}
-<!-- BlogPost.vue, omesso <script> -->
+```vue{5} [BlogPost.vue]
+<!-- omesso <script> -->
 <template>
   <div class="blog-post">
     <h4>{{ title }}</h4>
@@ -369,8 +371,8 @@ Il pulsante non fa ancora nulla: vogliamo che fare clic sul pulsante comunichi a
 
 Poi il componente figlio può emettere un evento esso stesso usando il metodo integrato [**`$emit`**](/api/component-instance#emit), passando il nome dell'evento:
 
-```vue{5}
-<!-- BlogPost.vue, omesso <script> -->
+```vue{5} [BlogPost.vue]
+<!-- omesso <script> -->
 <template>
   <div class="blog-post">
     <h4>{{ title }}</h4>
@@ -396,8 +398,7 @@ Facoltativamente possiamo dichiarare gli eventi emessi usando l'opzione <span cl
 
 <div class="options-api">
 
-```vue{5}
-<!-- BlogPost.vue -->
+```vue{4} [BlogPost.vue]
 <script>
 export default {
   props: ['title'],
@@ -409,8 +410,7 @@ export default {
 </div>
 <div class="composition-api">
 
-```vue{4}
-<!-- BlogPost.vue -->
+```vue{3} [BlogPost.vue]
 <script setup>
 defineProps(['title'])
 defineEmits(['enlarge-text'])
@@ -468,7 +468,7 @@ Qualcosa è andato storto.
 
 Questo risultato può essere ottenuto usando l'elemento personalizzato `<slot>` di Vue:
 
-```vue{4}
+```vue{4} [AlertBox.vue]
 <template>
   <div class="alert-box">
     <strong>Questo è un Errore a Scopo Dimostrativo</strong>
@@ -541,7 +541,7 @@ Puoi anche utilizzare l'attributo `is` per creare elementi HTML regolari.
 
 Quando si passa tra più componenti con `<component :is="...">`, il componente verrà smontato (unmounted) quando si passa ad un altro. Possiamo costringere i componenti inattivi a rimanere "vivi" con il [componente `<KeepAlive>`](/guide/built-ins/keep-alive) integrato.
 
-## Limitazioni nel Parsing dei DOM Template {#dom-template-parsing-caveats}
+## Limitazioni nel Parsing dei in-DOM Template {#in-dom-template-parsing-caveats}
 
 Se stai scrivendo i tuoi template Vue direttamente nel DOM, Vue dovrà recuperare la stringa del template dal DOM. Ciò porta ad alcune limitazioni a causa del comportamento di analisi di HTML nativo dei browser.
 
@@ -628,6 +628,6 @@ Il componente personalizzato `<blog-post-row>` verrà segnalato come contenuto n
 Quando utilizzato su elementi HTML nativi, il valore di `is` deve essere prefissato con `vue:` per essere interpretato come componente Vue. Ciò è necessario per evitare confusione con gli ([elementi nativi personalizzati](https://html.spec.whatwg.org/multipage/custom-elements.html#custom-elements-customized-builtin-example)).
 :::
 
-Questo è tutto ciò che devi sapere sulle limitazioni nel Parsing dei DOM template per ora - e in realtà, la fine degli Gli Elementi Essenziali di Vue. Congratulazioni! C'è ancora molto da imparare, ma prima, ti consigliamo di prenderti una pausa per giocare con Vue da solo - costruisci qualcosa di divertente o dai un'occhiata ad alcuni degli [Esempi](/examples/) se non lo hai già fatto.
+Questo è tutto ciò che devi sapere sulle limitazioni nel Parsing dei template in-DOM per ora - e in realtà, la fine degli Gli Elementi Essenziali di Vue. Congratulazioni! C'è ancora molto da imparare, ma prima, ti consigliamo di prenderti una pausa per giocare con Vue da solo - costruisci qualcosa di divertente o dai un'occhiata ad alcuni degli [Esempi](/examples/) se non lo hai già fatto.
 
 Una volta che ti sentirai a tuo agio con le conoscenze che hai appena assimilato, prosegui con la guida per approfondire ulteriormente i componenti.

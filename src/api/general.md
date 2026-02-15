@@ -129,9 +129,11 @@ Un helper per definire un componente Vue con inferenza del Type.
   type FooInstance = InstanceType<typeof Foo>
   ```
 
-  ### Function Signature <sup class="vt-badge" data-text="3.3+" /> {#function-signature}
+  ### Function Signature {#function-signature}
 
-  `defineComponent()` ha anche una firma (signature) alternativa che è pensata per essere utilizzata con la Composition API e le [render functions o JSX](/guide/extras/render-function.html).
+  - Only supported in 3.3+
+
+  `defineComponent()` ha anche una firma (signature) alternativa che è pensata per essere utilizzata con la the Composition API e le [render functions o JSX](/guide/extras/render-function.html).
 
   Invece di accettare un oggetto di options, si aspetta una funzione. Questa funzione lavora nello stesso modo della funzione [`setup()`](/api/composition-api-setup.html#composition-api-setup) della Composition API: riceve le props e il context di setup. Il valore di ritorno dovrebbe essere una render function - sono supportati sia `h()` sia JSX:
 

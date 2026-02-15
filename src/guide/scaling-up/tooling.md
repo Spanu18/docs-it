@@ -1,3 +1,7 @@
+<script setup>
+import { VTCodeGroup, VTCodeGroupTab } from '@vue/theme'
+</script>
+
 # Tooling {#tooling}
 
 ## Provalo online {#try-it-online}
@@ -17,15 +21,37 @@ Non è necessario installare nulla sul tuo computer per provare i SFC di Vue: ci
 
 ### Utilizzo di Vite {#vite}
 
-[Vite](https://vitejs.dev/) è uno strumento di build leggero e veloce con un supporto di prima classe per gli SFC (Single-File Components) di Vue. Vite è creato da Evan You, l'autore di Vue!
+[Vite](https://vitejs.dev/) is a lightweight and fast build tool with first-class Vue SFC support. It is created by Evan You, who is also the author of Vue!
 
 Per iniziare con Vite + Vue, esegui semplicemente:
 
-<div class="language-sh"><pre><code><span class="line"><span style="color:var(--vt-c-green);">$</span> <span style="color:#A6ACCD;">npm create vue@latest</span></span></code></pre></div>
+::: code-group
+
+```sh [npm]
+$ npm create vue@latest
+```
+
+```sh [pnpm]
+$ pnpm create vue@latest
+```
+  
+```sh [yarn]
+# Per Yarn Modern (v2+)
+$ yarn create vue@latest
+  
+# Per Yarn ^v4.11
+$ yarn dlx create-vue@latest
+```
+  
+```sh [bun]
+$ bun create vue@latest
+```
+
+:::
 
 Questo comando installerà ed eseguirà [create-vue](https://github.com/vuejs/create-vue), lo strumento ufficiale di creazione di progetti Vue.
 
-- Per saperne di più su Vite, consulta la [documentazione di Vite](https://vitejs.dev).
+- Per saperne di più su Vite, consulta la [documentazione di Vite](https://vite.dev/).
 - Per configurare il comportamento specifico di Vue in un progetto Vite, ad esempio passare opzioni al compilatore Vue, consulta la documentazione di  [@vitejs/plugin-vue](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue#readme).
 
 Entrambi i playground online menzionati sopra supportano anche il download dei file come progetto Vite.
@@ -53,10 +79,10 @@ Se stai cercando un'alternativa più leggera per l'uso senza fase di build, dai 
 
 ## Supporto IDE {#ide-support}
 
-- La configurazione IDE consigliata è [VSCode](https://code.visualstudio.com/) + l'estensione [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar). L'estensione fornisce evidenziazione della sintassi, supporto TypeScript e intellisense per le espressioni dei template e le props dei componenti.
+- La configurazione IDE consigliata è [VSCode](https://code.visualstudio.com/) + l'estensione [Vue - Official extension](https://marketplace.visualstudio.com/items?itemName=Vue.volar). L'estensione fornisce evidenziazione della sintassi, supporto TypeScript e intellisense per le espressioni dei template e le props dei componenti.
 
   :::tip
-  Volar sostituisce [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur), la nostra precedente estensione ufficiale di VSCode per Vue 2. Se hai Vetur attualmente installato, assicurati di disabilitarlo nei progetti Vue 3.
+  Vue - Official sostituisce [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur), la nostra precedente estensione ufficiale di VS Code per Vue 2. Se hai Vetur attualmente installato, assicurati di disabilitarlo nei progetti Vue 3.
   :::
 
 - [WebStorm](https://www.jetbrains.com/webstorm/) fornisce anche un ottimo supporto integrato per i Vue SFC.
@@ -69,27 +95,24 @@ Se stai cercando un'alternativa più leggera per l'uso senza fase di build, dai 
 
   - Supporto di emacs tramite [lsp-mode](https://emacs-lsp.github.io/lsp-mode/page/lsp-volar/)
 
-## I Devtools {#browser-devtools}
-
-<VueSchoolLink href="https://vueschool.io/lessons/using-vue-dev-tools-with-vuejs-3" title="Lezione gratuita sui Vue.js Devtools"/>
+## Browser Devtools {#browser-devtools}
 
 L'estensione dei devtools per il browser di Vue ti consente di esplorare l'albero dei componenti di un'app Vue, ispezionare lo stato dei singoli componenti, monitorare gli eventi di gestione dello stato e profilare le prestazioni.
 
-![devtools screenshot](https://raw.githubusercontent.com/vuejs/devtools/main/media/screenshot-shadow.png)
+![devtools screenshot](./images/devtools.png)
 
 - [Documentazione](https://devtools.vuejs.org/)
-- [Estensione Chrome](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-- [Addon Firefox](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-- [Estensione Edge](https://microsoftedge.microsoft.com/addons/detail/vuejs-devtools/olofadcdnkkjdfgjcmjaadnlehnnihnl)
-- [App Electron Standalone](https://devtools.vuejs.org/guide/installation.html#standalone)
+- [Estensione Chrome](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+- [Vite Plugin](https://devtools.vuejs.org/guide/vite-plugin)
+- [App Electron Standalone](https://devtools.vuejs.org/guide/standalone)
 
 ## TypeScript {#typescript}
 
 Articolo principale: [Using Vue with TypeScript](/guide/typescript/overview).
 
-- [Volar](https://github.com/johnsoncodehk/volar) fornisce il controllo dei tipi per gli SFC utilizzando blocchi `<script lang="ts">`, comprese le espressioni dei template e la validazione delle props tra i componenti.
+- [Vue - Official extension](https://github.com/vuejs/language-tools) fornisce il controllo dei tipi per gli SFC utilizzando blocchi `<script lang="ts">`, comprese le espressioni dei template e la validazione delle props tra i componenti.
 
-- Usa [`vue-tsc`](https://github.com/vuejs/language-tools/tree/master/packages/vue-tsc) per eseguire lo stesso controllo dei tipi da riga di comando, o per generare file `d.ts` per gli SFC.
+- Usa [`vue-tsc`](https://github.com/vuejs/language-tools/tree/master/packages/tsc) per eseguire lo stesso controllo dei tipi da riga di comando, o per generare file `d.ts` per gli SFC.
 
 ## Testing {#testing}
 
@@ -109,7 +132,7 @@ Gli utenti che in passato hanno utilizzato Vue CLI potrebbero essere abituati a 
 
 1. `npm install -D eslint eslint-plugin-vue`, poi segui la [guida alla configurazione](https://eslint.vuejs.org/user-guide/#usage) di `eslint-plugin-vue`.
 
-2. Configura le estensioni IDE di ESLint, ad esempio [ESLint per VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint), in modo da ottenere feedback dal linter direttamente nel tuo editor durante lo sviluppo. Questo evita anche un costo di linting non necessario durante l'avvio del server di sviluppo.
+2. Configura le estensioni IDE di ESLint, ad esempio [ESLint per VS Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint), in modo da ottenere feedback dal linter direttamente nel tuo editor durante lo sviluppo. Questo evita anche un costo di linting non necessario durante l'avvio del server di sviluppo.
 
 3. Esegui ESLint come parte del comando di build di produzione, in modo da ottenere un feedback completo dal linter prima della distribuzione in produzione.
 
@@ -117,7 +140,7 @@ Gli utenti che in passato hanno utilizzato Vue CLI potrebbero essere abituati a 
 
 ## Formattazione {#formatting}
 
-- L'estensione [Volar](https://github.com/johnsoncodehk/volar) per VSCode fornisce la formattazione per gli SFC di Vue direttamente.
+- L'estensione [Vue - Official](https://github.com/vuejs/language-tools) per VS Code fornisce la formattazione per gli SFC di Vue direttamente.
 
 - In alternativa, [Prettier](https://prettier.io/) fornisce il supporto integrato per la formattazione degli SFC di Vue.
 
@@ -159,9 +182,8 @@ Il loader ufficiale che fornisce il supporto per gli SFC di Vue in webpack. Se s
 
 - [VueUse Playground](https://play.vueuse.org)
 - [Vue + Vite su Repl.it](https://replit.com/@templates/VueJS-with-Vite)
-- [Vue su CodeSandbox](https://codesandbox.io/s/vue-3)
+- [Vue su CodeSandbox](https://codesandbox.io/p/devbox/github/codesandbox/sandbox-templates/tree/main/vue-vite)
 - [Vue su Codepen](https://codepen.io/pen/editor/vue)
-- [Vue su Components.studio](https://components.studio/create/vue3)
 - [Vue su WebComponents.dev](https://webcomponents.dev/create/cevue)
 
 <!-- TODO ## Backend Framework Integrations -->

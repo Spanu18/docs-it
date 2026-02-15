@@ -8,7 +8,7 @@
 
 A volte possiamo imbatterci nel seguente scenario: una parte del template di un componente appartiene logicamente ad esso, ma, da un punto di vista visuale, dovrebbe essere visualizzata altrove nel DOM, anche al di fuori dell'applicazione Vue.
 
-L'esempio più comune di ciò si verifica quando si costruisce una modale a schermo intero. Idealmente vogliamo che il pulsante della modale e la modale stessa risiedano all'interno dello stesso componente, poiché sono entrambi correlati allo stato di apertura/chiusura della modale. Ma ciò significa che la modale verrà resa allo stesso livello del pulsante, profondamente annidata nella gerarchia del DOM dell'applicazione. Questo può creare alcuni problemi / complicazioni quando si va a stilizzare la modale tramite CSS.
+L'esempio più comune di ciò si verifica quando si costruisce una modale a schermo intero. Idealmente vogliamo che il codice per il pulsante della modale e la modale stessa risiedano all'interno dello stesso componente single-file, poiché sono entrambi correlati allo stato di apertura/chiusura della modale. Ma ciò significa che la modale verrà resa allo stesso livello del pulsante, profondamente annidata nella gerarchia del DOM dell'applicazione. Questo può creare alcuni problemi / complicazioni quando si va a stilizzare la modale tramite CSS.
 
 Considera la seguente struttura HTML.
 
@@ -169,11 +169,11 @@ In alcuni casi potremmo voler disabilitare `<Teleport>` in maniera condizionale.
 </Teleport>
 ```
 
-Dove lo stato `isMobile` può essere aggiornato dinamicamente rilevando le modifiche delle media query.
+Potremmo quindi aggiornare dinamicamente `isMobile`.
 
 ## Teleport Multipli sullo Stesso Target {#multiple-teleports-on-the-same-target}
 
-Un caso d'uso comune potrebbe essere un componente `<Modal>` riutilizzabile, con la possibilità che più istanze siano attive contemporaneamente. Per questo tipo di scenario, più componenti `<Teleport>` possono montare il loro contenuto sullo stesso elemento target. L'ordine sarà quello di un semplice append - le aggiunte successive saranno posizionate dopo quelle precedenti all'interno dell'elemento target.
+Un caso d'uso comune potrebbe essere un componente `<Modal>` riutilizzabile, con la possibilità che più istanze siano attive contemporaneamente. Per questo tipo di scenario, più componenti `<Teleport>` possono montare il loro contenuto sullo stesso elemento target. L'ordine sarà quello di un semplice append, le aggiunte successive saranno posizionate dopo quelle precedenti ma all'interno dell'elemento target.
 
 Dato il seguente utilizzo:
 
@@ -194,6 +194,19 @@ Il risultato renderizzato sarebbe:
   <div>B</div>
 </div>
 ```
+
+## Deferred Teleport <sup class="vt-badge" data-text="3.5+" /> {#deferred-teleport}
+
+In Vue 3.5 and above, we can use the `defer` prop to defer the target resolving of a Teleport until other parts of the application have mounted. This allows the Teleport to target a container element that is rendered by Vue, but in a later part of the component tree:
+
+```vue-html
+<Teleport defer to="#late-div">...</Teleport>
+
+<!-- somewhere later in the template -->
+<div id="late-div"></div>
+```
+
+Note that the target element must be rendered in the same mount / update tick with the Teleport - i.e. if the `<div>` is only mounted a second later, the Teleport will still report an error. The defer works similarly to the `mounted` lifecycle hook.
 
 ---
 

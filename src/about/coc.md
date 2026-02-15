@@ -41,4 +41,6 @@ I responsabili del progetto che non seguono o applicano in buona fede il Codice 
 
 Questo Codice di Condotta è adattato da [Contributor Covenant][homepage], versione 1.4, disponibile su https://www.contributor-covenant.org/version/1/4/code-of-conduct.html.
 
+For answers to common questions about this code of conduct, see https://www.contributor-covenant.org/faq
+
 [homepage]: https://www.contributor-covenant.org

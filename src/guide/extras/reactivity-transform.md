@@ -1,12 +1,9 @@
 # Trasformazione della reattività (Reactivity Transform) {#reactivity-transform}
 
-:::danger Funzionalità sperimentale deprecata
-La trasformazione della reattività (Reactivity Transform) era una funzionalità sperimentale ed è stata deprecata. Si prega di leggere [il ragionamento qui](https://github.com/vuejs/rfcs/discussions/369#discussioncomment-5059028).
+:::danger Removed Experimental Feature
+La trasformazione della reattività (Reactivity Transform) era una funzionalità sperimentale ed è stata deprecata nella release 3.4. Si prega di leggere [il ragionamento qui](https://github.com/vuejs/rfcs/discussions/369#discussioncomment-5059028).
 
-Essa verrà rimossa dal core Vue in una versione futura tramite minor release.
-
-- Per rimuoverne l'utilizzo, controlla questo [strumento da riga di comando](https://github.com/edison1105/drop-reactivity-transform) che può automatizzare il processo.
-- Se intendi comunque utilizzarla, ora è disponibile tramite il plugin [Vue Macros](https://vue-macros.sxzz.moe/features/reactivity-transform.html).
+If you still intend to use it, it is now available via the [Vue Macros](https://vue-macros.sxzz.moe/features/reactivity-transform.html) plugin.
 :::
 
 :::tip Specifico per la Composition API
@@ -286,8 +283,8 @@ Quando si importano esplicitamente le macro da "vue/macros", il tipo funzionerà
 
 ## Uso esplicito {#explicit-opt-in}
 
-:::warning
-Quanto segue si applica solo fino alla versione Vue 3.3 e precedenti. Il supporto principale verrà rimosso nella versione 3.4 e successive. Se intendi continuare a utilizzare la trasformazione, effettula la migrazione a [Vue Macros](https://vue-macros.sxzz.moe/features/reactivity-transform.html).
+:::danger Non più supportato nel core
+Quanto segue si applica solo a Vue versione 3.3 e precedenti. Il supporto è stato rimosso da Vue core 3.4 e successive e da `@vitejs/plugin-vue` 5.0 e successive. Se si intende continuare a utilizzare la trasformazione, è necessario migrare a [Vue Macros](https://vue-macros.sxzz.moe/features/reactivity-transform.html).
 :::
 
 ### Vite {#vite}
@@ -296,8 +293,7 @@ Quanto segue si applica solo fino alla versione Vue 3.3 e precedenti. Il support
 - Si applica ai file SFC e js(x)/ts(x). Viene eseguito un rapido controllo dell'utilizzo dei file prima di applicare la trasformazione, pertanto non dovrebbero esserci costi in termini di prestazioni per i file che non utilizzano le macro.
 - Nota che `reactivityTransform` è ora un'opzione del plugin a livello root invece che annidata come `script.refSugar`, poiché non influisce solo sugli SFC.
 
-```js
-// vite.config.js
+```js [vite.config.js]
 export default {
   plugins: [
     vue({
@@ -312,8 +308,7 @@ export default {
 - Attualmente funzionante solo in file SFC
 - Richiede `vue-loader@>=17.0.0`
 
-```js
-// vue.config.js
+```js [vue.config.js]
 module.exports = {
   chainWebpack: (config) => {
     config.module
@@ -334,8 +329,7 @@ module.exports = {
 - Attualmente funzionante solo in file SFC
 - Richiede `vue-loader@>=17.0.0`
 
-```js
-// webpack.config.js
+```js [webpack.config.js]
 module.exports = {
   module: {
     rules: [

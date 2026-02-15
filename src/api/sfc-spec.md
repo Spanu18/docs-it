@@ -66,7 +66,7 @@ Blocchi personalizzati aggiuntivi possono essere inclusi in un file `*.vue` per 
 
 - [Gridsome: `<page-query>`](https://gridsome.org/docs/querying-data/)
 - [vite-plugin-vue-gql: `<gql>`](https://github.com/wheatjs/vite-plugin-vue-gql)
-- [vue-i18n: `<i18n>`](https://github.com/intlify/bundle-tools/tree/main/packages/vite-plugin-vue-i18n#i18n-custom-block)
+- [vue-i18n: `<i18n>`](https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n#i18n-custom-block)
 
 La gestione dei blocchi personalizzati dipenderà dagli strumenti utilizzati. Se desideri creare le tue integrazioni personalizzate per i blocchi, consulta la [sezione degli strumenti per integrazioni di blocchi personalizzati negli SFC](/guide/scaling-up/tooling#sfc-custom-block-integrations) per ulteriori dettagli.
 
@@ -105,7 +105,7 @@ p {{ msg }}
 
 Tieni presente che l'integrazione con diversi pre-processori può variare in base alla catena di strumenti utilizzata. Consulta la rispettiva documentazione per ulteriori esempi:
 
-- [Vite](https://vitejs.dev/guide/features.html#css-pre-processors)
+- [Vite](https://vite.dev/guide/features.html#css-pre-processors)
 - [Vue CLI](https://cli.vuejs.org/guide/css.html#pre-processors)
 - [webpack + vue-loader](https://vue-loader.vuejs.org/guide/pre-processors.html#using-pre-processors)
 
@@ -135,6 +135,20 @@ Gli import `src` funzionano anche con blocchi custom, per esempio:
 <unit-test src="./unit-test.js">
 </unit-test>
 ```
+
+:::warning Note
+While using aliases in `src`, don't start with `~`, anything after it is interpreted as a module request. This means you can reference assets inside node modules:
+```vue
+<img src="~some-npm-package/foo.png">
+```
+:::
+
+:::warning Nota
+Quando si utilizzano gli alias in `src`, non iniziare con `~`, poiché qualsiasi cosa dopo viene interpretata come una richiesta di modulo. Ciò significa che è possibile fare riferimento alle risorse all'interno dei node modules:
+```vue
+<img src="~some-npm-package/foo.png">
+```
+:::
 
 ## Commenti {#comments}
 
